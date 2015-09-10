@@ -1,0 +1,218 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.video_data .label {
+	-fx-text-fill: white;
+	-fx-text-alignment: center;
+	-fx-font-weight: bold;
+}
+
+.video_data .poster {
+	-fx-border-radius: 50;
+	-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
+
+.video_data {
+	-fx-cursor: hand;
+}
+
+.video_data .placeholder .label {
+	-fx-font-size: 50px;
+	-fx-text-fill: white;
+}
+
+.background {
+	-fx-background-color: rgb(23, 24, 27);
+}
+
+.background-menu {
+	-fx-background-color: rgb(22, 23, 26);
+	-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 2);
+}
+
+
+.menu-action {
+	-fx-text-fill: rgb(178, 180, 182);
+	-fx-font-weight: bold;
+	-fx-min-height: 40px;
+	-fx-padding: 0px 10px 0 10px;
+	-fx-cursor: hand;
+}
+
+.menu-action.selected {
+	-fx-border-color: rgb(43, 110, 210);
+	-fx-border-width: 0 0 5px 0;
+	-fx-padding: 5px 10px 0 10px;
+}
+
+.menu-action:hover {
+	-fx-text-fill: rgb(235, 235, 235);
+}
+
+
+.detail-content .title {
+	-fx-text-fill: white;
+	-fx-font-size: 40px;
+	-fx-font-weight: bold;
+}
+
+.detail-content .plot {
+	-fx-text-fill: white;
+	-fx-color-label-visible: white;
+	-fx-font-size: 17px;
+}
+
+.tvshow-details .list-view {
+    -fx-background-insets: 0 ;
+    -fx-background-color: transparent;
+}
+
+
+.tvshow-details .list-cell {
+    -fx-text-fill: white;
+    -fx-padding : 5px 5px 5px 5px;
+}
+
+.tvshow-details .list-cell:filled:selected:focused, .tvshow-details .list-cell:filled:selected {
+    -fx-background-color: rgb(27, 45, 76);
+}
+
+.tvshow-details .list-cell:even { /* <=== changed to even */
+    -fx-background-color: rgb(31, 32, 37);
+}
+
+.tvshow-details .list-cell:odd { /* <=== changed to even */
+    -fx-background-color: rgb(23, 24, 27);
+}
+
+.tvshow-details .list-cell:filled:hover {
+    -fx-background-color: rgb(38, 39, 45);
+}
+
+.tvshow-details .list-cell:empty {
+    -fx-background-color: transparent;
+}
+
+.episod-detail {
+	-fx-background-color: rgb(31, 32, 37);
+}
+
+.plot, .episod-detail .scroll-pane, .plot {
+	-fx-background-color: transparent;
+	-fx-control-inner-background : transparent;
+	-fx-background : transparent;
+}
+
+
+.episod-detail .plot .text, .background .text {
+	-fx-text-fill: white;/* color here not work see source code */
+	-fx-fill : white;
+}
+
+.play-button, .background .button {
+	-fx-background-color: rgb(31, 55, 95);
+	-fx-text-fill: white;
+	-fx-cursor: hand;
+	-fx-font-weight: bold;
+	-fx-font-size: 1.2em;
+}
+
+.play-button:hover, .background .button:hover {
+	-fx-background-color: rgb(34, 86, 148);
+}
+
+
+.season-details .poster, .detail-content .poster {
+	-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 2);
+}
+
+.hover-fanart-background {
+	-fx-background-color: rgba(0, 0, 0, .3);
+}
+
+/********************************* SCROOL STYLE ***********************/
+/** CSS **/
+/* The main scrollbar CSS class of ListView */
+ .scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color:derive(#434343,20%);
+	-fx-border-radius:2em;
+}
+
+/* The main scrollbar **track** CSS class  */
+ .scroll-bar:horizontal .track ,
+ .scroll-bar:vertical .track{
+	-fx-background-color:transparent;
+	-fx-border-color:transparent;
+	-fx-background-radius: 0em;
+	-fx-border-radius:2em;
+}
+
+/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
+ .scroll-bar:horizontal .thumb,
+ .scroll-bar:vertical .thumb {
+    -fx-background-color:derive(black,90%);
+	-fx-background-insets: 2, 0, 0;
+	-fx-background-radius: 2em;
+}
+
+
+.episod-detail .title,  .tvshow-details .title {
+	-fx-text-fill: white;
+	-fx-font-size: 30px;
+}
+
+.episod-detail .detail {
+	-fx-text-fill: rgb(141, 117, 79) !important;
+	-fx-fill : rgb(141, 117, 79) !important;
+}
+
+/******* font awesom ***********/
+
+
+/* ------------------------------------------------------------------------------------- */
+/** EVENT CSS **/
+/* ------------------------------------------------------------------------------------- */
+
+/* The main scrollbar **track** CSS class on event of "hover" and "pressed" */
+
+.scroll-bar:horizontal:hover .track ,
+.scroll-bar:horizontal:pressed .track ,
+.scroll-bar:vertical:hover .track,
+.scroll-bar:vertical:pressed .track {
+     -fx-background-color: derive(#434343,20%);
+	 -fx-opacity: 0.2;
+	 -fx-background-radius: 0em;
+}
+
+/* The main scrollbar **thumb** CSS class on event of "hover" and "pressed" */
+.scroll-bar .thumb:hover,
+.scroll-bar .thumb:pressed{
+    -fx-background-color: derive(black,100%);
+}
+
+/* The increment and decrement button CSS class of scrollbar */
+ .scroll-bar:horizontal .increment-button ,
+ .scroll-bar:horizontal .decrement-button {
+    -fx-background-color:transparent;
+	-fx-background-radius: 0em;
+	-fx-padding:0 0 10 0;
+
+}
+
+/* The increment and decrement button CSS class of scrollbar */
+
+ .scroll-bar:vertical .increment-button ,
+ .scroll-bar:vertical .decrement-button {
+
+    -fx-background-color:transparent;
+	-fx-background-radius: 0em;
+	-fx-padding:0 10 0 0;
+
+}
+
+  .scroll-bar .increment-arrow,
+  .scroll-bar .decrement-arrow
+ {
+	-fx-shape: " ";
+	-fx-padding:0;
+}
+
+/********************************* END SCROOL STYLE ***********************/

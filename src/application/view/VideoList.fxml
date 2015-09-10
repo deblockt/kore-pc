@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.TilePane?>
+
+<BorderPane minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.VideoListController">
+   <center>
+      <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" styleClass="background" BorderPane.alignment="CENTER">
+         <content>
+            <FlowPane fx:id="contentPane" alignment="TOP_CENTER" columnHalignment="CENTER" hgap="20.0" styleClass="background" vgap="20.0">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </FlowPane>
+         </content>
+      </ScrollPane>
+   </center>
+   <top>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" styleClass="background-menu" BorderPane.alignment="CENTER">
+         <items>
+            <Label fx:id="videoButton" text="Films">
+               <styleClass>
+                  <String fx:value="menu-action" />
+                  <String fx:value="selected" />
+               </styleClass>
+            </Label>
+            <Label fx:id="tvShowButton" styleClass="menu-action" text="Series" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <TextField fx:id="filter" prefHeight="25.0" prefWidth="358.0" promptText="Rechercher" />
+   			<Pane HBox.hgrow="ALWAYS" />
+            <Label fx:id="kodyName" styleClass="menu-action" />
+            <Label fx:id="reloadButton" styleClass="menu-action" text="Recharger" />
+            <Label fx:id="parameterButton" styleClass="menu-action" text="Paramètres" />
+         </items>
+      </ToolBar>
+   </top>
+</BorderPane>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.TilePane?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="background" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.KodyListController">
+   <top>
+      <Label text="Liste des instances kody trouvées" BorderPane.alignment="CENTER" />
+   </top>
+   <bottom>
+      <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER_RIGHT">
+         <BorderPane.margin>
+            <Insets top="10.0" />
+         </BorderPane.margin>
+         <children>
+            <ImageView fx:id="loadingImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+            <Button fx:id="validateButton" contentDisplay="CENTER" mnemonicParsing="false" text="Valider">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </bottom>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+   <center>
+      <Accordion fx:id="kodyList" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
