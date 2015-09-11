@@ -35,6 +35,7 @@
 	-fx-min-height: 40px;
 	-fx-padding: 0px 10px 0 10px;
 	-fx-cursor: hand;
+	
 }
 
 .menu-action.selected {
@@ -119,6 +120,20 @@
 	-fx-background-color: rgb(34, 86, 148);
 }
 
+.play-button-right {
+	-fx-background-radius : 0 3px 3px 0;
+	-fx-border-width : 0 0 0 1px;
+	-fx-border-color : gray;
+	-fx-border-radius: 0;
+}
+
+.play-button-left {
+	-fx-border-radius:3px 0 0 3px;
+	-fx-background-radius : 3px 0 0 3px;	
+	-fx-border-width : 0 1px 0 0;
+	-fx-border-color : gray;
+	-fx-border-radius: 0;
+}
 
 .season-details .poster, .detail-content .poster {
 	-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 2);
@@ -126,6 +141,11 @@
 
 .hover-fanart-background {
 	-fx-background-color: rgba(0, 0, 0, .3);
+}
+
+.context-menu, .context-menu .menu-item, .context-menu .text {
+	-fx-fill-text : black;
+	-fx-fill : black;
 }
 
 /********************************* SCROOL STYLE ***********************/

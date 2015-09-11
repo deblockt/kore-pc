@@ -116,10 +116,12 @@ public class VideoListController {
 			VIDEO_CACHE
 		)*/;
 
+		System.out.println("Chargement des films");
 		movie.execute(connection, new ApiCallback<List<DetailsMovie>>() {
 
 			@Override
 			public void onSuccess(List<DetailsMovie> result) {
+				System.out.println("SUCCESS");
 				for (DetailsMovie movie : result) {
 					films.add(movie);
 				}

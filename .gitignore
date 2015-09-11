@@ -8,6 +8,7 @@
 bin
 build
 target 
+target/**
 
 # Package Files #
 *.jar

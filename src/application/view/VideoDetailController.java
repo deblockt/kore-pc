@@ -1,18 +1,10 @@
 package application.view;
 
-
 import org.xbmc.kore.host.HostInfo;
 import org.xbmc.kore.host.HostManager;
-import org.xbmc.kore.jsonrpc.ApiCallback;
-import org.xbmc.kore.jsonrpc.Handler;
-import org.xbmc.kore.jsonrpc.HostConnection;
-import org.xbmc.kore.jsonrpc.method.Files.PrepareDownload;
-import org.xbmc.kore.jsonrpc.type.FilesType;
 import org.xbmc.kore.jsonrpc.type.VideoType.DetailsMovie;
 
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -38,7 +30,9 @@ public class VideoDetailController {
 	private Text plot;
 
 	@FXML
-	private Button play;
+	private Pane playContainer;
+	
+	private DlnaButton play;
 
 	@FXML
 	private Label videoButton;
@@ -60,34 +54,8 @@ public class VideoDetailController {
 		videoButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> TransitionManager.showVideoList(VideoType.VIDEO));
 		tvshowButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> TransitionManager.showVideoList(VideoType.TV_SHOW));
 
-		play.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
-			@Override
-			public void handle(MouseEvent event) {
-				// récupération de l'url de la video
-				HostInfo currentHost = HostManager.getInstance().getCurrentHostInfo();
-				HostConnection connection = new HostConnection(currentHost);
-
-				PrepareDownload prepare = new PrepareDownload(detailsMovie.file);
-				prepare.execute(connection, new ApiCallback<FilesType.PrepareDownloadReturnType>() {
-
-					@Override
-					public void onSuccess(FilesType.PrepareDownloadReturnType result) {
-						System.out.println("Succes de la réupération de l'URL");
-						String uri = currentHost.getHttpURL() + "/" + result.path;
-						System.out.println(uri);
-						TransitionManager.showPlayer(uri);
-					}
-
-					@Override
-					public void onError(int errorCode, String description) {
-						System.out.println("Erreur lors de la récupération " + errorCode + " : " + description);
-
-					}
-
-				} , new Handler());
-			}
-		});
+		
 	}
 
 	private void reinitData() {
@@ -105,6 +73,10 @@ public class VideoDetailController {
 
 			fanartBackground.setBackground(new Background(myBI));
 		}
+		
+		play = new DlnaButton(detailsMovie);
+		playContainer.getChildren().clear();
+		playContainer.getChildren().add(play);
 	}
 
 	public void setVideoData(DetailsMovie detailsMovie) {

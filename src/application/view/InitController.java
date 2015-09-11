@@ -62,7 +62,7 @@ public class InitController {
 		final InetAddress inetAddress = getWLANipAddress();
 		final String ipAddress = inetAddress.toString();
 		final String templateipAddress = ipAddress.substring(1, ipAddress.lastIndexOf('.')) + ".";
-
+		
 		for (int i = 0; i < NUMBER_IP_TEST; i++) {
 			final String otherAddress = templateipAddress + String.valueOf(i);
 

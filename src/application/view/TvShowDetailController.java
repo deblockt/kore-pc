@@ -60,7 +60,7 @@ public class TvShowDetailController {
 	private ListView<DetailsEpisode> episodList;
 
 	@FXML
-	private Button play;
+	private Pane playContainer;
 
 	@FXML
 	private Pane episodDetails;
@@ -85,6 +85,8 @@ public class TvShowDetailController {
 
 	private HashMap<Integer, List<DetailsEpisode>> episodes;
 
+	private DlnaButton dlnaButton = new DlnaButton();
+	
 	public void setTvShowDetails(DetailsTVShow detailTvShow) {
 		this.detailTvShow = detailTvShow;
 		title.setText(detailTvShow.label);
@@ -101,6 +103,8 @@ public class TvShowDetailController {
 			seasonDetail.setBackground(new Background(myBI));
 		}
 		this.loadTvShowDetail();
+		
+		playContainer.getChildren().add(dlnaButton);
 	}
 
 	@FXML
@@ -112,7 +116,7 @@ public class TvShowDetailController {
 
 
 		episodList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			// HostInfo hostInfo = HostManager.getInstance().getCurrentHostInfo();
+			dlnaButton.setDetailsEpisode(newValue);
 
 			if (newValue != null) {
 				episodDetails.setVisible(true);
@@ -140,6 +144,8 @@ public class TvShowDetailController {
                         super.updateItem(t, bln);
                         if (t != null) {
                             setText(t.episode + " - " + t.title);
+                        } else {
+                        	setText("");
                         }
                     }
 
@@ -169,31 +175,6 @@ public class TvShowDetailController {
                 return cell;
             }
         });
-
-		play.setOnAction((event) -> {
-			// récupération de l'url de la video
-			HostInfo currentHost = HostManager.getInstance().getCurrentHostInfo();
-			HostConnection connection = new HostConnection(currentHost);
-
-			PrepareDownload prepare = new PrepareDownload(episodList.getSelectionModel().getSelectedItem().file);
-			prepare.execute(connection, new ApiCallback<FilesType.PrepareDownloadReturnType>() {
-
-				@Override
-				public void onSuccess(FilesType.PrepareDownloadReturnType result) {
-					System.out.println("Succes de la réupération de l'URL");
-					String uri = currentHost.getHttpURL() + "/" + result.path;
-					System.out.println(uri);
-					TransitionManager.showPlayer(uri);
-				}
-
-				@Override
-				public void onError(int errorCode, String description) {
-					System.out.println("Erreur lors de la récupération " + errorCode + " : " + description);
-
-				}
-			} , new Handler());
-		});
-
 
 		videoButton.addEventFilter(MouseEvent.MOUSE_CLICKED, (e) -> {
             TransitionManager.showVideoList(VideoType.VIDEO);

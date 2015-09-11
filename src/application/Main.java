@@ -3,6 +3,7 @@ package application;
 
 import org.xbmc.kore.host.HostManager;
 
+import application.service.DLNAService;
 import application.service.ParameterService;
 import application.view.TransitionManager;
 import application.view.VideoType;
@@ -28,6 +29,7 @@ public class Main extends Application {
 			scene.getStylesheets().add(Main.class.getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 
+			
 			// TODO voir pouvoir le programme ne se ferme pas tous seul
 			primaryStage.setOnCloseRequest((t) -> {
 				Platform.exit();
@@ -50,6 +52,9 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
+		// start the DLNA service
+		DLNAService.start();
+		
 		launch(args);
 	}
 }

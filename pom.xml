@@ -7,13 +7,15 @@
 
 	<repositories>
 		<repository>
-			<id>4thline.org.repo</id>
+			<id>4thline.org-repo</id>
 			<url>http://4thline.org/m2</url>
 			<snapshots>
+			
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
 	</repositories>
+	
 	<dependencies>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
