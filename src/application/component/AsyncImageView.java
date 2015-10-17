@@ -127,7 +127,7 @@ public class AsyncImageView extends Pane {
 	}
 
 	private void loadImage(){
-		Image image = new Image(this.path, TILE_WIDTH, TILE_HEIGHT, true, true, true);
+		Image image = CacheImageFactory.getImage(this.path, TILE_WIDTH, TILE_HEIGHT, true, true, true);
 		this.imageView = new ImageView(image);
 		this.imageView.getStyleClass().add("poster");
 		image.progressProperty().addListener(new RemovePlaceHolderListener(this));

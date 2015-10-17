@@ -33,6 +33,7 @@
             <TextField fx:id="filter" prefHeight="25.0" prefWidth="358.0" promptText="Rechercher" />
    			<Pane HBox.hgrow="ALWAYS" />
             <Label fx:id="kodyName" styleClass="menu-action" />
+            <Label fx:id="playingButton" styleClass="menu-action" text="En cours" />
             <Label fx:id="reloadButton" styleClass="menu-action" text="Recharger" />
             <Label fx:id="parameterButton" styleClass="menu-action" text="Paramètres" />
          </items>

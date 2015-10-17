@@ -4,6 +4,7 @@ package application;
 import org.xbmc.kore.host.HostManager;
 
 import application.service.DLNAService;
+import application.service.ParameterNames;
 import application.service.ParameterService;
 import application.view.TransitionManager;
 import application.view.VideoType;
@@ -29,7 +30,7 @@ public class Main extends Application {
 			scene.getStylesheets().add(Main.class.getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 
-			
+
 			// TODO voir pouvoir le programme ne se ferme pas tous seul
 			primaryStage.setOnCloseRequest((t) -> {
 				Platform.exit();
@@ -41,10 +42,18 @@ public class Main extends Application {
 				TransitionManager.showVideoList(VideoType.VIDEO);
 				TransitionManager.maximize();
 			} else {
+				// init vlc PATH
+				String osName = System.getProperty("os.name");
+				if (osName.toLowerCase().contains("windows")) {
+					ParameterService.getInstance().setParameter(ParameterNames.VIDEO_PLAYER_PATH, "C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe");
+				} else {
+					// TODO TEST MAC Os
+					ParameterService.getInstance().setParameter(ParameterNames.VIDEO_PLAYER_PATH, "/Applications/VLC.app/Contents/MacOS/VLC");
+				}
 				TransitionManager.showInit();
 			}
-			primaryStage.setWidth(300);
-			primaryStage.setHeight(200);
+			primaryStage.setWidth(500);
+			primaryStage.setHeight(400);
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -54,7 +63,7 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		// start the DLNA service
 		DLNAService.start();
-		
+
 		launch(args);
 	}
 }

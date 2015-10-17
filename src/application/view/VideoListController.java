@@ -1,27 +1,18 @@
 package application.view;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.xbmc.kore.host.HostInfo;
 import org.xbmc.kore.host.HostManager;
-import org.xbmc.kore.jsonrpc.ApiCallback;
-import org.xbmc.kore.jsonrpc.ApiMethod;
 import org.xbmc.kore.jsonrpc.Handler;
-import org.xbmc.kore.jsonrpc.HostConnection;
-import org.xbmc.kore.jsonrpc.method.VideoLibrary.GetMovies;
-import org.xbmc.kore.jsonrpc.method.VideoLibrary.GetTVShows;
 import org.xbmc.kore.jsonrpc.type.VideoType.DetailsMedia;
 import org.xbmc.kore.jsonrpc.type.VideoType.DetailsMovie;
 import org.xbmc.kore.jsonrpc.type.VideoType.DetailsTVShow;
-import org.xbmc.kore.jsonrpc.type.VideoType.FieldsMovie;
-import org.xbmc.kore.jsonrpc.type.VideoType.FieldsTVShow;
 
 import application.cache.Cache;
 import application.cache.CacheFactory;
@@ -29,9 +20,7 @@ import application.cache.OneFileCache;
 import application.component.AsyncImageView;
 import application.service.PoundedElement;
 import application.service.SmithWaterman;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
+import application.service.VideosLists;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -56,6 +45,9 @@ public class VideoListController {
 	private Label parameterButton;
 
 	@FXML
+	private Label playingButton;
+
+	@FXML
 	private Pane contentPane;
 
 	@FXML
@@ -67,111 +59,44 @@ public class VideoListController {
 	@FXML
 	private Label kodyName;
 
-	private List<DetailsMovie> films = new ArrayList<>();
-	private boolean loadingFilm = false;
-
-	/**
-	 * list des tvshow
-	 */
-	protected List<DetailsTVShow> tvShows = new ArrayList<>();
-	private boolean loadingTvShows = false;
-
 	private boolean filmSection;
 
 	private static Map<String, Pane> tiles = new HashMap<>();
 
-	private static Comparator<DetailsMovie> COMPARATOR_MOVIE = (o1, o2) -> {
-		String title1 = StringUtils.isBlank(o1.sorttitle) ? o1.title : o1.sorttitle;
-		String title2 = StringUtils.isBlank(o2.sorttitle) ? o2.title : o2.sorttitle;
-		return title1.compareTo(title2);
-	};
+	private List<DetailsMovie> films = new ArrayList<>();
+	protected List<DetailsTVShow> tvShows = new ArrayList<>();
 
-	private static Comparator<DetailsTVShow> COMPARATOR_TVSHOW = (o1, o2) -> {
-		String title1 = StringUtils.isBlank(o1.sorttitle) ? o1.title : o1.sorttitle;
-		String title2 = StringUtils.isBlank(o2.sorttitle) ? o2.title : o2.sorttitle;
-		return title1.compareTo(title2);
-	};
-
-	private static Cache<List<DetailsMovie>>  VIDEO_CACHE = new CacheFactory<>(new OneFileCache(".videoData")).getCache();
-	private static Cache<List<DetailsTVShow>> TVSHOW_CACHE = new CacheFactory<>(new OneFileCache(".tvshowData")).getCache();
+	private boolean filmsLoaded = false;
+	private boolean tvShowsLoaded = false;
 
 	/**
 	 * load film list
 	 */
 	private synchronized void loadFilmList() {
-		// si la liste est déjà chargée ou si c'est en train d'être chargé
-		if (!films.isEmpty() || loadingFilm) {
-			return;
+		if (!filmsLoaded) {
+			VideosLists.INSTANCE.getFilmList((list) -> {
+				films = list;
+				filmsLoaded = true;
+				new Handler().post(() -> showAllFilms());
+			});
 		}
-		loadingFilm = true;
-
-		HostInfo currentHost = HostManager.getInstance().getCurrentHostInfo();
-		HostConnection connection = new HostConnection(currentHost);
-
-		ApiMethod<List<DetailsMovie>> movie = //new CachedApiMethod<>(
-			new GetMovies(
-				FieldsMovie.TITLE, FieldsMovie.FILE, FieldsMovie.PLOT,
-				FieldsMovie.THUMBNAIL, FieldsMovie.SORTTITLE, FieldsMovie.FANART
-			)/*,
-			VIDEO_CACHE
-		)*/;
-
-		System.out.println("Chargement des films");
-		movie.execute(connection, new ApiCallback<List<DetailsMovie>>() {
-
-			@Override
-			public void onSuccess(List<DetailsMovie> result) {
-				System.out.println("SUCCESS");
-				for (DetailsMovie movie : result) {
-					films.add(movie);
-				}
-				loadingFilm = false;
-				Collections.sort(films, COMPARATOR_MOVIE);
-				showAllFilms();
-			}
-
-			@Override
-			public void onError(int errorCode, String description) {
-				System.out.println("Erreur sur la récupération des films");
-				System.out.println(errorCode + ":" + description);
-			}
-		}, new Handler());
 	}
-
-
 
 	public synchronized void loadTvShow() {
-		if (!this.tvShows.isEmpty() || loadingTvShows) {
-			return;
+		if (!tvShowsLoaded) {
+			System.out.println("Chargement des series");
+			VideosLists.INSTANCE.getTvShow((list) -> {
+				tvShows = list;
+				tvShowsLoaded = true;
+				System.out.println("Fin du chargement");
+				new Handler().post(() -> showAllTvShow());
+			});
 		}
-		loadingTvShows = true;
-
-		ApiMethod<List<DetailsTVShow>> getTvShows = //new CachedApiMethod<>(
-			new GetTVShows(FieldsTVShow.allValues)/*,
-			TVSHOW_CACHE
-		)*/;
-
-		HostInfo currentHost = HostManager.getInstance().getCurrentHostInfo();
-		HostConnection connection = new HostConnection(currentHost);
-		getTvShows.execute(connection, new ApiCallback<List<DetailsTVShow>>() {
-
-			@Override
-			public void onSuccess(List<DetailsTVShow> result) {
-				for (DetailsTVShow movie : result) {
-					tvShows.add(movie);
-				}
-				loadingTvShows = false;
-				Collections.sort(tvShows, COMPARATOR_TVSHOW);
-				showAllTvShow();
-			}
-
-			@Override
-			public void onError(int errorCode, String description) {
-				System.out.println("Erreur lors de la récupération des séries:  " + errorCode + " : " + description);
-			}
-		}, new Handler());
-
 	}
+
+	private static Cache<List<DetailsMovie>>  VIDEO_CACHE = new CacheFactory<>(new OneFileCache(".videoData")).getCache();
+	private static Cache<List<DetailsTVShow>> TVSHOW_CACHE = new CacheFactory<>(new OneFileCache(".tvshowData")).getCache();
+
 
 	/**
 	 * filter films by search input
@@ -191,15 +116,11 @@ public class VideoListController {
 		}
 
 		if (filmSection) {
-			List<PoundedElement<DetailsMovie>> filtredList =  filterList(films);
-			for (PoundedElement<DetailsMovie> poundedElement : filtredList) {
-				addTile(poundedElement.data);
-			}
+			List<DetailsMovie> filtredList =  filterList(films);
+			filtredList.forEach(this::addTile);
 		} else {
-			List<PoundedElement<DetailsTVShow>> filtredList =  filterList(tvShows);
-			for (PoundedElement<DetailsTVShow> poundedElement : filtredList) {
-				addTile(poundedElement.data);
-			}
+			List<DetailsTVShow> filtredList =  filterList(tvShows);
+			filtredList.forEach(this::addTile);
 		}
 
 		// on parcourt tous les tiles pour afficher les images
@@ -217,18 +138,19 @@ public class VideoListController {
 	 * @param data
 	 * @return
 	 */
-	private <T extends DetailsMedia> List<PoundedElement<T>> filterList(List<T> data) {
-		List<PoundedElement<T>> retour = new LinkedList<>();
-
-		for (T detailsMovie : data) {
-			int similarity = getSimilarity(detailsMovie.title, filter.getText());
-			if (similarity > 70) {
-				retour.add(new PoundedElement<T>(similarity, detailsMovie));
-			}
-		}
-
-		Collections.sort(retour);
-		return retour;
+	private <T extends DetailsMedia> List<T> filterList(List<T> data) {
+		return data.stream()
+			.map((detailsMovie) -> {
+				int similarity = getSimilarity(detailsMovie.title, filter.getText());
+				if (similarity > 70) {
+					return new PoundedElement<T>(similarity, detailsMovie);
+				}
+				return null;
+			})
+			.filter((e) -> e != null)
+			.sorted()
+			.map((e) -> e.data)
+			.collect(Collectors.toList());
 	}
 
 	public void showAllFilms() {
@@ -245,12 +167,12 @@ public class VideoListController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		for (DetailsMovie detailsMovie : films) {
-			addTile(detailsMovie);
-		}
+
+		films.forEach(this::addTile);
 	}
 
 	public void showAllTvShow() {
+		System.out.println("showAllTvShow");
 		this.filmSection = false;
 
 		this.videoButton.getStyleClass().remove("selected");
@@ -260,9 +182,7 @@ public class VideoListController {
 
 		loadTvShow();
 		this.contentPane.getChildren().clear();
-		for (DetailsTVShow detailstvShow : tvShows) {
-			addTile(detailstvShow);
-		}
+		tvShows.forEach(this::addTile);
 	}
 
 	public void addTile(DetailsMovie detailsMovie) {
@@ -293,14 +213,8 @@ public class VideoListController {
 
 		Pane box = createTileContent(detailsMovie.thumbnail, detailsMovie.title, detailsMovie.label);
 
-		box.setOnMouseClicked(new EventHandler<MouseEvent>(){
-
-			@Override
-			public void handle(MouseEvent arg0) {
-				// affichage du detail de la video
-				TransitionManager.showDetail(detailsMovie);
-			}
-		});
+		// affichage du detail de la video
+		box.setOnMouseClicked(e -> TransitionManager.showDetail(detailsMovie));
 
 		tiles.put("movie"+detailsMovie.movieid, box);
 		return box;
@@ -312,14 +226,8 @@ public class VideoListController {
 		}
 		Pane box = createTileContent(detailsTVShow.thumbnail, detailsTVShow.title, detailsTVShow.label);
 
-		box.setOnMouseClicked(new EventHandler<MouseEvent>(){
-
-			@Override
-			public void handle(MouseEvent arg0) {
-				// affichage du detail de la video
-				TransitionManager.showTvShowDetails(detailsTVShow);
-			}
-		});
+		// affichage du detail de la video
+		box.setOnMouseClicked(e ->  TransitionManager.showTvShowDetails(detailsTVShow));
 
 		tiles.put("tvshow"+detailsTVShow.tvshowid, box);
 		return box;
@@ -355,14 +263,9 @@ public class VideoListController {
 		reloadButton.addEventFilter(MouseEvent.MOUSE_CLICKED, (e) -> this.reload());
 
 		parameterButton.addEventFilter(MouseEvent.MOUSE_CLICKED, (e) -> TransitionManager.openParameters());
-		filter.textProperty().addListener(new ChangeListener<String>() {
+		playingButton.addEventFilter(MouseEvent.MOUSE_CLICKED, (e) -> TransitionManager.showPlaying());
 
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				filterFilms(newValue);
-			}
-		});
-
+		filter.textProperty().addListener((observable, oldValue, newValue) -> filterFilms(newValue));
 	}
 
 
@@ -373,10 +276,12 @@ public class VideoListController {
 		if (this.filmSection) {
 			VIDEO_CACHE.clearCache();
 			this.films.clear();
+			filmsLoaded = false;
 			this.loadFilmList();
 		} else {
 			TVSHOW_CACHE.clearCache();
 			this.tvShows.clear();
+			tvShowsLoaded = false;
 			this.loadTvShow();
 		}
 	}

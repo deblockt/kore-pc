@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.TilePane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.VideoDetailController">
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.VideoDetailController">
    <center>
       <GridPane fx:id="fanartBackground" BorderPane.alignment="CENTER">
          <columnConstraints>
@@ -27,7 +27,7 @@
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints maxHeight="-Infinity" percentHeight="5.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" percentHeight="100.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" percentHeight="100.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="-Infinity" percentHeight="5.0" vgrow="SOMETIMES" />
                   <RowConstraints />
               </rowConstraints>
@@ -59,7 +59,7 @@
                               <Insets top="15.0" />
                            </GridPane.margin>
                         </ScrollPane>
-                        <Button fx:id="play" minWidth="150.0" mnemonicParsing="false" styleClass="play-button" text="Lancer" GridPane.rowIndex="2" />
+                        <VBox fx:id="playContainer" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
                   <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">

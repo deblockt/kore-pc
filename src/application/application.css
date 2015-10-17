@@ -35,7 +35,7 @@
 	-fx-min-height: 40px;
 	-fx-padding: 0px 10px 0 10px;
 	-fx-cursor: hand;
-	
+
 }
 
 .menu-action.selected {
@@ -129,7 +129,7 @@
 
 .play-button-left {
 	-fx-border-radius:3px 0 0 3px;
-	-fx-background-radius : 3px 0 0 3px;	
+	-fx-background-radius : 3px 0 0 3px;
 	-fx-border-width : 0 1px 0 0;
 	-fx-border-color : gray;
 	-fx-border-radius: 0;
@@ -236,3 +236,47 @@
 }
 
 /********************************* END SCROOL STYLE ***********************/
+
+
+
+
+/************************ TAB CSS ****************************************/
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
+
+.tab-pane {
+    -fx-tab-min-width:90px;
+}
+
+.tab{
+    -fx-background-insets: 0 1 0 1,0,0;
+}
+
+.tab-pane .tab
+{
+    -fx-background-color: derive(rgb(23, 24, 27) , 10%);
+}
+
+.tab-pane .tab:selected
+{
+    -fx-background-color: derive(rgb(23, 24, 27) , 30%);
+}
+
+.tab:selected .focus-indicator {
+    -fx-border-radius: 11 11 0 0, 10 10 0 0;
+    -fx-border-color: transparent ;
+    -fx-background-color: transparent ;
+}
+
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: #828282;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.tab:selected .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: #96b946;
+}

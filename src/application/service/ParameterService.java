@@ -25,7 +25,7 @@ public class ParameterService {
 			properties.load(new FileInputStream(new File(PROPERTIES_FILE)));
 		} catch (IOException e) {
 			System.err.println("Impossible de charger les paramètres");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
     }
 
@@ -108,12 +108,17 @@ public class ParameterService {
 	 */
 	public void save() {
 		try {
-			this.properties.store(new FileOutputStream(new File(PROPERTIES_FILE)), "saved by kore pc");
+			File file = new File(PROPERTIES_FILE);
+			if (!file.exists()) {
+				if (!file.getParentFile().exists()) {
+					file.getParentFile().mkdirs();
+				}
+				file.createNewFile();
+			}
+			this.properties.store(new FileOutputStream(file), "saved by kore pc");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

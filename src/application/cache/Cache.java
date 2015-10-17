@@ -41,6 +41,14 @@ public class Cache<Y> {
 	}
 
 	/**
+	 * return the path to fileCache
+	 * @return
+	 */
+	public String getCacheFilePath() {
+		return this.file.getAbsolutePath();
+	}
+
+	/**
 	 * check if the cache file already exists
 	 * @param videoCacheFile
 	 * @return

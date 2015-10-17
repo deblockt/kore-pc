@@ -36,9 +36,17 @@ public class CachedApiMethod<T> {
 	public void execute(HostConnection hostConnection, ApiCallback<T> callback, Handler handler) {
 		if (this.cache.issetCache()) {
 			try {
-				T result = cache.getCacheData();
-				callback.onSuccess(result);
-				return;
+				Thread t = new Thread(() -> {
+					T result;
+					try {
+						result = cache.getCacheData();
+						callback.onSuccess(result);
+					} catch (Exception e) {
+						// clear error cache and re run loading
+						cache.clearCache();
+					}
+				});
+				t.start();
 			} catch (Exception e) {
 				// error, no issue (call normal api method)
 				e.printStackTrace();
@@ -50,13 +58,18 @@ public class CachedApiMethod<T> {
 
 			@Override
 			public void onSuccess(T result) {
+				if (!cache.issetCache()) {
+					callback.onSuccess(result);
+				}
+				cache.clearCache();
 				cache.save(result);
-				callback.onSuccess(result);
 			}
 
 			@Override
 			public void onError(int errorCode, String description) {
-				callback.onError(errorCode, description);
+				if (!cache.issetCache()) {
+					callback.onError(errorCode, description);
+				}
 			}
 		}, handler);
 	}

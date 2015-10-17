@@ -9,7 +9,6 @@ import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.meta.RemoteDevice;
 import org.fourthline.cling.model.meta.RemoteService;
-import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.types.ServiceId;
 import org.fourthline.cling.model.types.UDAServiceId;
 import org.fourthline.cling.support.avtransport.callback.Play;
@@ -24,9 +23,8 @@ import org.xbmc.kore.jsonrpc.type.FilesType;
 import org.xbmc.kore.jsonrpc.type.FilesType.PrepareDownloadReturnType;
 import org.xbmc.kore.jsonrpc.type.PlaylistType;
 import org.xbmc.kore.jsonrpc.type.VideoType.DetailsEpisode;
-import org.xbmc.kore.jsonrpc.type.VideoType.DetailsItem;
+import org.xbmc.kore.jsonrpc.type.VideoType.DetailsFile;
 import org.xbmc.kore.jsonrpc.type.VideoType.DetailsMovie;
-import org.xbmc.kore.jsonrpc.type.VideoType.DetailsTVShow;
 
 import application.service.DLNAService;
 import application.service.DLNAService.DlnaListener;
@@ -44,10 +42,10 @@ public class DlnaButton extends HBox {
 
 	private ContextMenu contextMenu = new ContextMenu();
 
-	private DetailsItem detailsItem;
-	
+	private DetailsFile detailsItem;
+
 	PlaylistType.Item item;
-	
+
 	private interface Closure<T> {
 		public void run(T param);
 	}
@@ -78,13 +76,13 @@ public class DlnaButton extends HBox {
 		initDlnaListener();
 		initButtons();
 	}
-	
+
 	public DlnaButton(DetailsMovie detailsMovie) {
 		this();
-		
+
 		this.setDetailsMovie(detailsMovie);
-		
-        
+
+
 	}
 	/**
 	 * set the details movie
@@ -92,7 +90,7 @@ public class DlnaButton extends HBox {
 	 */
 	public void setDetailsMovie(DetailsMovie detailsMovie) {
 		this.detailsItem = detailsMovie;
-		
+
 		PlaylistType.Item item = new PlaylistType.Item();
         item.movieid = detailsMovie.movieid;
 	}
@@ -110,7 +108,7 @@ public class DlnaButton extends HBox {
 			item = null;
 		}
 	}
-	
+
 	/**
 	 * init the dlna listener
 	 * add menu item on ContextMenu
@@ -134,14 +132,17 @@ public class DlnaButton extends HBox {
 
 			@Override
 			public void deviceAdded(RemoteDevice device) {
+				System.out.println("DLNABUTTON ==> " + device.getDetails().getFriendlyName());
 				MenuItem menu = new MenuItem(device.getDetails().getFriendlyName());
 				menu.setOnAction((e) -> {
 					PrepareDownload prepare = new PrepareDownload(detailsItem.file);
+
 					prepare.execute(
 						HostManager.getInstance().getConnection(),
 						new VideoLauncher((uri) -> {
+							String metaData = initMetadata(uri, detailsItem.runtime, detailsItem.art.poster, detailsItem.title);
 							RemoteService service = device.findService(new UDAServiceId("AVTransport"));
-			                
+
 			                final ActionCallback playAction =
 			                        new Play(service) {
 			                            @Override
@@ -158,7 +159,7 @@ public class DlnaButton extends HBox {
 
 			                        };
 
-			                final ActionCallback setTargetInvocation = new SetAVTransportURI(service, uri.toString(), "NOT_IMPLEMENTED") {
+			                final ActionCallback setTargetInvocation = new SetAVTransportURI(service, uri.toString(), metaData) {
 
 			                    @Override
 			                    public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMsg) {
@@ -184,8 +185,17 @@ public class DlnaButton extends HBox {
 			}
 		});
 	}
-	
-	
+
+	private final String META_DATA = "<DIDL-Lite xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\" xmlns:dlna=\"urn:schemas-dlna-org:metadata-1-0/\">	<item id=\"video/all_videos/1764\" parentID=\"video/all_videos\" restricted=\"1\">		<dc:title>%title%</dc:title>		<dc:creator>unknown</dc:creator>		<upnp:artist>unknown</upnp:artist>		<upnp:actor>unknown</upnp:actor>		<upnp:author>unknown</upnp:author>		<upnp:genre>Unknown</upnp:genre>		<upnp:albumArtURI>			%fanart%		</upnp:albumArtURI>				<res duration=\"%duration%\" size=\"5510872\" protocolInfo=\"http-get:*:video/mp4:DLNA.ORG_PN=AVC_MP4_BL_L3L_SD_AAC;DLNA.ORG_OP=01;DLNA.ORG_FLAGS=01700000000000000000000000000000\">			%uri%		</res>		<upnp:class>object.item.videoItem</upnp:class>	</item></DIDL-Lite>";
+	private String initMetadata(String uri, Integer duration, String fanart, String title) {
+		int hour = duration / 3600;
+		int minutes = (duration % 3600) / 60;
+		int secondes = ((duration % 3600) % 60);
+		return META_DATA.replace("%fanart%", fanart)
+						.replace("%uri%", uri)
+						.replace("%duration%", hour+":"+minutes+":"+secondes)
+						.replace("%title%", title);
+	}
 	/**
 	 * init all buttons
 	 * @param detailsMovie
@@ -212,22 +222,22 @@ public class DlnaButton extends HBox {
 
 		this.getChildren().add(play);
 		this.getChildren().add(more);
-		
-		
+
+
 
 		play.setOnAction((e) -> {
 			// récupération de l'url de la video
 			PrepareDownload prepare = new PrepareDownload(detailsItem.file);
 			prepare.execute(
 				HostManager.getInstance().getConnection(),
-				new VideoLauncher((uri) -> TransitionManager.showPlayer(uri)) ,
+				new VideoLauncher((uri) -> TransitionManager.showPlayer(uri, detailsItem.label)) ,
 				new Handler()
-			);			
+			);
 		});
 
 		xbmc.setOnAction((e) -> {
 			// lancement de la video sur xbmc
-			
+
 			Player.Open action = new Player.Open(item);
 			action.execute(HostManager.getInstance().getConnection(), new ApiCallback<String>() {
 				@Override

@@ -27,7 +27,7 @@
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints maxHeight="-Infinity" percentHeight="5.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" percentHeight="100.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" percentHeight="100.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="-Infinity" percentHeight="5.0" vgrow="SOMETIMES" />
                   <RowConstraints />
               </rowConstraints>

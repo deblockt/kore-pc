@@ -21,7 +21,7 @@ public class CacheFactory<T> {
 	}
 
 
-	private final static String DEFAULT_CACHE_DIRECTORY = System.getProperty("java.io.tmpdir");
+	public final static String DEFAULT_CACHE_DIRECTORY = System.getProperty("java.io.tmpdir");
 
 	private final FilenameGenerator<? super T> filenameGenerator;
 
@@ -31,6 +31,10 @@ public class CacheFactory<T> {
 		super();
 		this.filenameGenerator = filenameGenerator;
 		this.cacheDirectory = cacheDirectory;
+		File directory = new File(this.cacheDirectory);
+		if (!directory.exists()) {
+			directory.mkdir();
+		}
 	}
 
 	public CacheFactory(FilenameGenerator<? super T> filenameGenerator) {

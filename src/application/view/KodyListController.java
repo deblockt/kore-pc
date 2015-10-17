@@ -17,10 +17,10 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TitledPane;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -49,6 +49,8 @@ public class KodyListController {
 	private void checkValidity() {
 		List<HostInfoPane> valide = new ArrayList<>();
 		List<HostInfoPane> invalide = new ArrayList<>();
+
+
 		// check all hostInfo
 		IntegerProperty numberTestFinish = new SimpleIntegerProperty();
 		numberTestFinish.addListener((event, oldValue, newValue) -> {
@@ -91,8 +93,6 @@ public class KodyListController {
 						}
 					}
 				}
-
-
 			});
 
 		});

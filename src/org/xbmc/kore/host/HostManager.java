@@ -153,4 +153,8 @@ public class HostManager {
 			this.setCurrentHostInfo(info);
 		}
 	}
+
+	public HostConnection getConnection() {
+		return new HostConnection(this.getCurrentHostInfo());
+	}
 }

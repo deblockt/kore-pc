@@ -8,6 +8,7 @@ import org.fourthline.cling.UpnpServiceImpl;
 import org.fourthline.cling.controlpoint.ControlPoint;
 import org.fourthline.cling.model.message.header.STAllHeader;
 import org.fourthline.cling.model.meta.RemoteDevice;
+import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.types.ServiceId;
 import org.fourthline.cling.registry.DefaultRegistryListener;
@@ -18,9 +19,9 @@ public class DLNAService {
 	 * service d'acces au DLNA
 	 */
 	private static final UpnpService UPNP_SERVICE = new UpnpServiceImpl();
-	
+
 	private static final List<DlnaListener> LISTENERS = new ArrayList<>();
-	
+
 	/**
 	 * start the service if not started not dlna can be discovered
 	 */
@@ -29,6 +30,7 @@ public class DLNAService {
 		UPNP_SERVICE.getRegistry().addListener(new DefaultRegistryListener() {
 			@Override
 			public void remoteDeviceAdded(Registry registry, RemoteDevice device) {
+				System.out.println("device added " + device.getDetails().getFriendlyName() + " ! ");
 				for (DlnaListener listener: LISTENERS) {
 	                if (mustCallListener(listener, device)) {
 	                    listener.deviceAdded(device);
@@ -44,8 +46,6 @@ public class DLNAService {
 	                }
 	            }
 			}
-
-
 		});
 
 		// Broadcast a search message for all devices
@@ -68,7 +68,7 @@ public class DLNAService {
             }
         }
     }
-    
+
     /**
      * remove a listener
      *
@@ -77,7 +77,7 @@ public class DLNAService {
     public static void removeListener(final DlnaListener listener) {
     	LISTENERS.remove(listener);
     }
-    
+
     /**
      * check if the device need to be send to the listener
      *
@@ -95,7 +95,7 @@ public class DLNAService {
         }
 
         return true;
-    }	
+    }
 
     /**
      * return the control point
@@ -104,7 +104,7 @@ public class DLNAService {
 	public static ControlPoint getControlPoint() {
 		return UPNP_SERVICE.getControlPoint();
 	}
-    
+
 	/**
      * Listener use for dlna device
      */

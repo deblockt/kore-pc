@@ -39,6 +39,20 @@ public class TransitionManager {
 	}
 
 	/**
+	 * show the playing string
+	 */
+	public static void showPlaying() {
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("view/Playing.fxml"));
+        try {
+        	Parent root =  loader.load();
+            primaryStage.getScene().setRoot(root);
+        } catch (Exception e) {
+        	throw new RuntimeException(e);
+        }
+	}
+
+	/**
 	 * Affiche le detail d'une video
 	 *
 	 * @param detailsMovie
@@ -103,9 +117,10 @@ public class TransitionManager {
 
 
 
-	public static void showPlayer(String uri) {
+	public static void showPlayer(String uri, String title) {
 		try {
-			String cmd = "\""+ParameterService.getInstance().getString(ParameterNames.VIDEO_PLAYER_PATH) + "\" --fullscreen \""+uri+"\"";
+			String cmd = ParameterService.getInstance().getString(ParameterNames.VIDEO_PLAYER_PATH) + " --fullscreen "+uri+" --input-title-format=\""+title+"\" --no-video-title-show";
+			System.out.println(cmd);
 			Runtime.getRuntime().exec(cmd);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

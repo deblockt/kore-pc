@@ -10,17 +10,16 @@ import org.xbmc.kore.host.HostManager;
 import org.xbmc.kore.jsonrpc.ApiCallback;
 import org.xbmc.kore.jsonrpc.Handler;
 import org.xbmc.kore.jsonrpc.HostConnection;
-import org.xbmc.kore.jsonrpc.method.Files.PrepareDownload;
 import org.xbmc.kore.jsonrpc.method.VideoLibrary.GetEpisodes;
-import org.xbmc.kore.jsonrpc.type.FilesType;
 import org.xbmc.kore.jsonrpc.type.VideoType.DetailsEpisode;
 import org.xbmc.kore.jsonrpc.type.VideoType.DetailsSeason;
 import org.xbmc.kore.jsonrpc.type.VideoType.DetailsTVShow;
 import org.xbmc.kore.jsonrpc.type.VideoType.FieldsEpisode;
 
+import application.cache.CacheFactory;
+import application.cache.CachedApiMethod;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -86,7 +85,10 @@ public class TvShowDetailController {
 	private HashMap<Integer, List<DetailsEpisode>> episodes;
 
 	private DlnaButton dlnaButton = new DlnaButton();
-	
+
+	private static final CacheFactory<DetailsTVShow> EPISODE_CACHE_FACTORY = new CacheFactory<DetailsTVShow>((data) -> data.label+".episodes");
+
+
 	public void setTvShowDetails(DetailsTVShow detailTvShow) {
 		this.detailTvShow = detailTvShow;
 		title.setText(detailTvShow.label);
@@ -103,7 +105,7 @@ public class TvShowDetailController {
 			seasonDetail.setBackground(new Background(myBI));
 		}
 		this.loadTvShowDetail();
-		
+
 		playContainer.getChildren().add(dlnaButton);
 	}
 
@@ -189,8 +191,10 @@ public class TvShowDetailController {
 
 	private void loadTvShowDetail() {
 
-		GetEpisodes getEpisodes = new GetEpisodes(detailTvShow.tvshowid, FieldsEpisode.allValues);
-
+		CachedApiMethod<List<DetailsEpisode>> getEpisodes = new CachedApiMethod<>(
+			new GetEpisodes(detailTvShow.tvshowid, FieldsEpisode.allValues),
+			EPISODE_CACHE_FACTORY.getCache(detailTvShow)
+		);
 		HostInfo hostInfo = HostManager.getInstance().getCurrentHostInfo();
 		HostConnection connection = new HostConnection(hostInfo);
 		getEpisodes.execute(connection, new ApiCallback<List<DetailsEpisode>>() {

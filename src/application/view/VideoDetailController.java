@@ -4,6 +4,7 @@ import org.xbmc.kore.host.HostInfo;
 import org.xbmc.kore.host.HostManager;
 import org.xbmc.kore.jsonrpc.type.VideoType.DetailsMovie;
 
+import application.component.CacheImageFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -31,7 +32,7 @@ public class VideoDetailController {
 
 	@FXML
 	private Pane playContainer;
-	
+
 	private DlnaButton play;
 
 	@FXML
@@ -55,7 +56,7 @@ public class VideoDetailController {
 		tvshowButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> TransitionManager.showVideoList(VideoType.TV_SHOW));
 
 
-		
+
 	}
 
 	private void reinitData() {
@@ -63,17 +64,17 @@ public class VideoDetailController {
 		plot.setText(detailsMovie.plot);
 
 		HostInfo host = HostManager.getInstance().getCurrentHostInfo();
-		Image image = new Image(host.getImageUrl(detailsMovie.thumbnail), 300, -1, true, false, true);
+		Image image = CacheImageFactory.getImage(host.getImageUrl(detailsMovie.thumbnail), 300, -1, true, true, true);
 		poster.setImage(image);
 
 		if (detailsMovie.fanart != null) {
-			BackgroundImage myBI= new BackgroundImage(new Image(host.getImageUrl(detailsMovie.fanart), true),
+			BackgroundImage myBI= new BackgroundImage(CacheImageFactory.getImage(host.getImageUrl(detailsMovie.fanart), true),
 			        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
 			          new BackgroundSize(100, 100, true, true, false, true));
 
 			fanartBackground.setBackground(new Background(myBI));
 		}
-		
+
 		play = new DlnaButton(detailsMovie);
 		playContainer.getChildren().clear();
 		playContainer.getChildren().add(play);

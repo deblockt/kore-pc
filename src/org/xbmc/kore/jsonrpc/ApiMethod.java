@@ -83,7 +83,7 @@ public abstract class ApiMethod<T> {
             params = (ObjectNode)jsonRequest.get(PARAMS_NODE);
         } else {
             params = objectMapper.createObjectNode();
-            jsonRequest.put(PARAMS_NODE, params);
+            jsonRequest.set(PARAMS_NODE, params);
         }
 
         return params;
@@ -149,7 +149,7 @@ public abstract class ApiMethod<T> {
             for (int i = 0; i < values.length; i++) {
                 arrayNode.add(values[i]);
             }
-            getParametersNode().put(parameter, arrayNode);
+            getParametersNode().set(parameter, arrayNode);
         }
     }
 
@@ -160,7 +160,7 @@ public abstract class ApiMethod<T> {
      */
     protected void addParameterToRequest(String parameter, ApiParameter value) {
         if (value != null)
-            getParametersNode().put(parameter, value.toJsonNode());
+            getParametersNode().set(parameter, value.toJsonNode());
     }
 
     /**
@@ -170,7 +170,7 @@ public abstract class ApiMethod<T> {
      */
     protected void addParameterToRequest(String parameter, JsonNode value) {
         if (value != null)
-            getParametersNode().put(parameter, value);
+            getParametersNode().set(parameter, value);
     }
 
     /**
