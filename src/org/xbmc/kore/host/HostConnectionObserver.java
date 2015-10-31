@@ -15,6 +15,10 @@
  */
 package org.xbmc.kore.host;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.xbmc.kore.jsonrpc.ApiCallback;
 import org.xbmc.kore.jsonrpc.Handler;
 import org.xbmc.kore.jsonrpc.HostConnection;
@@ -25,9 +29,6 @@ import org.xbmc.kore.jsonrpc.notification.System;
 import org.xbmc.kore.jsonrpc.type.ListType;
 import org.xbmc.kore.jsonrpc.type.PlayerType;
 import org.xbmc.kore.utils.LogUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Object that listens to a connection and notifies observers about changes in its state

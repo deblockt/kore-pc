@@ -20,6 +20,7 @@ import application.cache.CacheFactory;
 import application.cache.CachedApiMethod;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -31,8 +32,11 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Callback;
@@ -145,9 +149,30 @@ public class TvShowDetailController {
                     protected void updateItem(DetailsEpisode t, boolean bln) {
                         super.updateItem(t, bln);
                         if (t != null) {
-                            setText(t.episode + " - " + t.title);
+                        	HBox box = new HBox();
+                        	Label lepisode = new Label(String.valueOf(t.episode));
+                        	lepisode.setMinWidth(30);
+                        	box.getChildren().add(lepisode);
+                        	box.getChildren().add(new Label(t.title));
+
+                        	if (t.playcount > 0) {
+                        		// use for align right the seen label
+                        		Pane pane = new Pane();
+                        		HBox.setHgrow(pane, Priority.ALWAYS);
+                        		box.getChildren().add(pane);
+
+                        		Label seen = new Label("Vu");
+                        		seen.getStyleClass().add("seen");
+                        		// not work i don't understand
+                        		seen.setTextFill(Paint.valueOf("rgb(171, 247, 115)"));
+                        		HBox.setMargin(seen, new Insets(0, 10, 0, 0));
+
+                        		box.getChildren().add(seen);
+                        	}
+                        	setGraphic(box);
                         } else {
                         	setText("");
+                        	setGraphic(null);
                         }
                     }
 

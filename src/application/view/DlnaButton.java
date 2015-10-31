@@ -91,7 +91,7 @@ public class DlnaButton extends HBox {
 	public void setDetailsMovie(DetailsMovie detailsMovie) {
 		this.detailsItem = detailsMovie;
 
-		PlaylistType.Item item = new PlaylistType.Item();
+		item = new PlaylistType.Item();
         item.movieid = detailsMovie.movieid;
 	}
 
@@ -132,7 +132,6 @@ public class DlnaButton extends HBox {
 
 			@Override
 			public void deviceAdded(RemoteDevice device) {
-				System.out.println("DLNABUTTON ==> " + device.getDetails().getFriendlyName());
 				MenuItem menu = new MenuItem(device.getDetails().getFriendlyName());
 				menu.setOnAction((e) -> {
 					PrepareDownload prepare = new PrepareDownload(detailsItem.file);

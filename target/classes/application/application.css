@@ -103,11 +103,6 @@
 }
 
 
-.episod-detail .plot .text, .background .text {
-	-fx-text-fill: white;/* color here not work see source code */
-	-fx-fill : white;
-}
-
 .play-button, .background .button {
 	-fx-background-color: rgb(31, 55, 95);
 	-fx-text-fill: white;
@@ -147,6 +142,30 @@
 	-fx-fill-text : black;
 	-fx-fill : black;
 }
+
+.video-info, .info-separator {
+	-fx-text-fill: rgb(230, 222, 208) ;
+	-fx-font-weight: bold;
+}
+
+.info-separator {
+	-fx-padding: 0 10px 0 10px;
+}
+
+.episod-detail .plot .text, .background .text {
+	-fx-fill : white;
+}
+
+.seen {
+	-fx-padding : 0 0 0 15px;
+	-fx-text-fill : rgb(171, 247, 115);
+	-fx-fill: rgb(171, 247, 115);
+	-fx-font-weight: bold;
+}
+
+
+
+
 
 /********************************* SCROOL STYLE ***********************/
 /** CSS **/

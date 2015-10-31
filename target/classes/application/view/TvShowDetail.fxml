@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.TilePane?>
 
-<BorderPane minHeight="600.0" minWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.TvShowDetailController">
+<BorderPane minHeight="600.0" minWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.TvShowDetailController">
    <center>
       <GridPane BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -50,7 +50,10 @@
                             <RowConstraints percentHeight="70.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label fx:id="title" styleClass="title" text="Titre" />
+                              <Label fx:id="title" styleClass="title" text="Titre">
+                                 <font>
+                                    <Font size="22.0" />
+                                 </font></Label>
                               <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="plot" GridPane.rowIndex="1">
                                  <content>
                                     <TextFlow style="-fx-background-color: transparent;" styleClass="plot">
@@ -100,7 +103,10 @@
                               <RowConstraints percentHeight="8.0" valignment="CENTER" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <Label fx:id="episodTitle" styleClass="title" text="Label" />
+                              <Label fx:id="episodTitle" styleClass="title" text="Label">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font></Label>
                               <Label fx:id="episodSaisonAndNum" styleClass="detail" text="Label" GridPane.rowIndex="1" />
                               <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="0.0" GridPane.rowIndex="2">
                                  <content>

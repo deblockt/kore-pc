@@ -22,6 +22,8 @@ import org.xbmc.kore.jsonrpc.HostConnection;
 
 import application.service.ParameterNames;
 import application.service.ParameterService;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 
 /**
  * Manages XBMC Hosts
@@ -42,7 +44,7 @@ public class HostManager {
 	/**
 	 * Current host
 	 */
-	private HostInfo currentHostInfo = null;
+	private SimpleObjectProperty<HostInfo> currentHostInfo = new SimpleObjectProperty<>();
 
     /**
      * Singleton constructor
@@ -69,7 +71,7 @@ public class HostManager {
 		}
 
 		if (!hosts.isEmpty()) {
-			currentHostInfo = hosts.get(paramService.getInt(ParameterNames.SELECTED_HOST, 0));
+			currentHostInfo.set(hosts.get(paramService.getInt(ParameterNames.SELECTED_HOST, 0)));
 		}
 	}
 
@@ -98,6 +100,14 @@ public class HostManager {
 	 * @return
 	 */
 	public HostInfo getCurrentHostInfo(){
+		return currentHostInfo.get();
+	}
+
+	/**
+	 * get the observate host property
+	 * @return
+	 */
+	public Property<HostInfo> currentHostInfoProperty() {
 		return currentHostInfo;
 	}
 
@@ -105,7 +115,7 @@ public class HostManager {
 	 * set the urrent host info
 	 */
 	public void setCurrentHostInfo(HostInfo  hostinfo) {
-		this.currentHostInfo = hostinfo;
+		this.currentHostInfo.set(hostinfo);
 		for (int i = 0; i < this.hosts.size(); ++i) {
 			if (hosts.get(i).getAddress().equals(hostinfo.getAddress())) {
 				ParameterService.getInstance().setParameter(ParameterNames.SELECTED_HOST, i);
@@ -120,10 +130,18 @@ public class HostManager {
 	 * @param info
 	 */
 	public void addHost(HostInfo info) {
+		editHost(info, info);
+	}
+
+	public HostConnection getConnection() {
+		return new HostConnection(this.getCurrentHostInfo());
+	}
+
+	public void editHost(HostInfo oldHostInfo, HostInfo newHostInfo) {
 		int index = hosts.size();
 		// host already exists
 		for (int i = 0; i < this.hosts.size(); ++i) {
-			if (hosts.get(i).getAddress().equals(info.getAddress())) {
+			if (hosts.get(i).getAddress().equals(oldHostInfo.getAddress())) {
 				index = i;
 				break;
 			}
@@ -133,28 +151,46 @@ public class HostManager {
 			hosts.remove(index);
 		}
 
-		hosts.add(index, info);
+		hosts.add(index, newHostInfo);
 
 		// add all parameters on config file
 		ParameterService paramService = ParameterService.getInstance();
-		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_NAME, index), info.getName());
-		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_IP, index), info.getAddress());
-		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_PROTOCOL, index), info.getProtocol());
-		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_HTTP_PORT, index), info.getHttpPort());
-		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_TCP_PORT, index), info.getTcpPort());
-		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_USERNAME, index), info.getUsername());
-		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_PASSWORD, index), info.getPassword());
-		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_USEEVENT, index), info.getUseEventServer());
-		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_EVENT_PORT, index), info.getEventServerPort());
+		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_NAME, index), newHostInfo.getName());
+		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_IP, index), newHostInfo.getAddress());
+		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_PROTOCOL, index), newHostInfo.getProtocol());
+		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_HTTP_PORT, index), newHostInfo.getHttpPort());
+		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_TCP_PORT, index), newHostInfo.getTcpPort());
+		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_USERNAME, index), newHostInfo.getUsername());
+		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_PASSWORD, index), newHostInfo.getPassword());
+		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_USEEVENT, index), newHostInfo.getUseEventServer());
+		paramService.setParameter(ParameterNames.getIndexedName(ParameterNames.HOST_EVENT_PORT, index), newHostInfo.getEventServerPort());
 
 		paramService.save();
 
 		if (this.currentHostInfo == null) {
-			this.setCurrentHostInfo(info);
+			this.setCurrentHostInfo(newHostInfo);
 		}
 	}
 
-	public HostConnection getConnection() {
-		return new HostConnection(this.getCurrentHostInfo());
+	/**
+	 * remove host info for this index
+	 * @param index
+	 */
+	public void removeHost(int index) {
+		hosts.remove(index);
+
+		ParameterService paramService = ParameterService.getInstance();
+		paramService.removeParameter(ParameterNames.getIndexedName(ParameterNames.HOST_NAME, index));
+		paramService.removeParameter(ParameterNames.getIndexedName(ParameterNames.HOST_IP, index));
+		paramService.removeParameter(ParameterNames.getIndexedName(ParameterNames.HOST_PROTOCOL, index));
+		paramService.removeParameter(ParameterNames.getIndexedName(ParameterNames.HOST_HTTP_PORT, index));
+		paramService.removeParameter(ParameterNames.getIndexedName(ParameterNames.HOST_TCP_PORT, index));
+		paramService.removeParameter(ParameterNames.getIndexedName(ParameterNames.HOST_USERNAME, index));
+		paramService.removeParameter(ParameterNames.getIndexedName(ParameterNames.HOST_PASSWORD, index));
+		paramService.removeParameter(ParameterNames.getIndexedName(ParameterNames.HOST_USEEVENT, index));
+		paramService.removeParameter(ParameterNames.getIndexedName(ParameterNames.HOST_EVENT_PORT, index));
+
+		paramService.save();
 	}
+
 }

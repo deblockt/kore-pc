@@ -257,6 +257,13 @@ public class VideoListController {
 
 		kodyName.setText(HostManager.getInstance().getCurrentHostInfo().getName());
 
+		HostManager.getInstance().currentHostInfoProperty().addListener(
+			(obser, oldValue, newValue) -> {
+				kodyName.setText(newValue.getName());
+				reload();
+			}
+		);
+
 		videoButton.addEventFilter(MouseEvent.MOUSE_CLICKED, (e) -> this.showAllFilms());
 		tvShowButton.addEventFilter(MouseEvent.MOUSE_CLICKED, (e) -> this.showAllTvShow());
 
@@ -266,6 +273,8 @@ public class VideoListController {
 		playingButton.addEventFilter(MouseEvent.MOUSE_CLICKED, (e) -> TransitionManager.showPlaying());
 
 		filter.textProperty().addListener((observable, oldValue, newValue) -> filterFilms(newValue));
+
+
 	}
 
 

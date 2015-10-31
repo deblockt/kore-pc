@@ -307,6 +307,7 @@ public class VideoType {
             runtime = JsonUtils.intFromJsonNode(node, RUNTIME, 0);
             streamdetails = node.has(STREAMDETAILS) ? new Streams(node.get(STREAMDETAILS)) : null;
         }
+
     }
 
     /**

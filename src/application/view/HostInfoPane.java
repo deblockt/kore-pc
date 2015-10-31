@@ -39,6 +39,7 @@ public class HostInfoPane extends GridPane {
 	@FXML
 	private TextField password;
 
+	private final HostInfo hostInfos;
 
 	public HostInfoPane(final HostInfo hostInfos) {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("HostInfoPane.fxml"));
@@ -64,9 +65,12 @@ public class HostInfoPane extends GridPane {
 		protocol.getSelectionModel().select(hostInfos.getProtocol());
 		username.setText(hostInfos.getUsername());
 		password.setText(hostInfos.getPassword());
-
+		this.hostInfos = hostInfos;
 	}
 
+	public HostInfo getOldHostInfo() {
+		return this.hostInfos;
+	}
 
 	public HostInfo getNewHostInfo() {
 		return new HostInfo(

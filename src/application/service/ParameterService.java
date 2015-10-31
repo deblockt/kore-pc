@@ -104,6 +104,14 @@ public class ParameterService {
 	}
 
 	/**
+	 * remove the config parameter
+	 * @param name
+	 */
+	public void removeParameter(String name) {
+		this.properties.remove(name);
+	}
+
+	/**
 	 * save properties
 	 */
 	public void save() {
@@ -122,6 +130,7 @@ public class ParameterService {
 			e.printStackTrace();
 		}
 	}
+
 
 
 

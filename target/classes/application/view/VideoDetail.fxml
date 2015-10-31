@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.TilePane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.VideoDetailController">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.VideoDetailController">
    <center>
       <GridPane fx:id="fanartBackground" BorderPane.alignment="CENTER">
          <columnConstraints>
@@ -38,6 +38,7 @@
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
                     </rowConstraints>
@@ -47,7 +48,7 @@
                               <Font size="22.0" />
                            </font>
                         </Label>
-                        <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="plot" GridPane.rowIndex="1">
+                        <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="plot" GridPane.rowIndex="2">
                            <content>
                               <TextFlow>
                                  <children>
@@ -59,7 +60,28 @@
                               <Insets top="15.0" />
                            </GridPane.margin>
                         </ScrollPane>
-                        <VBox fx:id="playContainer" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2" />
+                        <VBox fx:id="playContainer" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3" />
+                        <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+                           <children>
+                              <Label fx:id="year" styleClass="video-info" text="année" />
+                              <Label styleClass="info-separator" text="-" />
+                              <Label fx:id="duration" styleClass="video-info" text="durée" />
+                              <Label styleClass="video-info" text="min" />
+                              <Label styleClass="info-separator" text="-" />
+                              <Label fx:id="genres" styleClass="video-info" text="genres" />
+                              <Label styleClass="info-separator" text="-" />
+                              <Label fx:id="score" styleClass="video-info" text="note" />
+                              <Label styleClass="video-info" text="/10" />
+                              <Label fx:id="seen" styleClass="seen" text="Vu">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                           <GridPane.margin>
+                              <Insets top="20.0" />
+                           </GridPane.margin>
+                        </HBox>
                      </children>
                   </GridPane>
                   <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">

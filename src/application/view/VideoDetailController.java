@@ -1,5 +1,6 @@
 package application.view;
 
+import org.apache.commons.lang3.StringUtils;
 import org.xbmc.kore.host.HostInfo;
 import org.xbmc.kore.host.HostManager;
 import org.xbmc.kore.jsonrpc.type.VideoType.DetailsMovie;
@@ -47,6 +48,21 @@ public class VideoDetailController {
 	@FXML
 	private VBox posterContainer;
 
+	@FXML
+	private Label year;
+
+	@FXML
+	private Label duration;
+
+	@FXML
+	private Label genres;
+
+	@FXML
+	private Label score;
+
+	@FXML
+	private Label seen;
+
 	private DetailsMovie detailsMovie;
 
 	@FXML
@@ -78,6 +94,14 @@ public class VideoDetailController {
 		play = new DlnaButton(detailsMovie);
 		playContainer.getChildren().clear();
 		playContainer.getChildren().add(play);
+
+		year.setText(String.valueOf(detailsMovie.year));
+		duration.setText(String.valueOf(detailsMovie.runtime / 60));
+		score.setText(String.format("%.2g%n", detailsMovie.rating));
+		genres.setText(StringUtils.join(detailsMovie.genre, " / "));
+		if (detailsMovie.playcount == 0) {
+			seen.setVisible(false);
+		}
 	}
 
 	public void setVideoData(DetailsMovie detailsMovie) {

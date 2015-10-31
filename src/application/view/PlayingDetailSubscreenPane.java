@@ -1,16 +1,25 @@
 package application.view;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.commons.lang3.StringUtils;
+import org.fourthline.cling.model.action.ActionInvocation;
+import org.fourthline.cling.model.message.UpnpResponse;
+import org.fourthline.cling.model.meta.RemoteService;
+import org.fourthline.cling.support.avtransport.callback.Seek;
+import org.fourthline.cling.support.model.SeekMode;
 import org.xbmc.kore.host.HostInfo;
 import org.xbmc.kore.host.HostManager;
 import org.xbmc.kore.jsonrpc.Handler;
 import org.xbmc.kore.jsonrpc.type.VideoType.DetailsFile;
 
+import application.service.DLNAService;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -50,7 +59,11 @@ public class PlayingDetailSubscreenPane extends GridPane {
 	@FXML
 	private Button stopButton;
 
+	private boolean pause = false;
+
 	private static Timer timer = new Timer();
+
+	private SeekListenerManager seekListenerManager = new SeekListenerManager();
 
 	public PlayingDetailSubscreenPane(DetailsFile details) {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("PlayingDetailSubscreen.fxml"));
@@ -86,14 +99,20 @@ public class PlayingDetailSubscreenPane extends GridPane {
 		timeSlider.valueProperty().addListener((observable, old, newValue) -> {
 			new Handler().post(() -> time.setText((formatDuration(newValue.intValue()))));
 		});
+		timeSlider.valueProperty().addListener(seekListenerManager);
 
 		timer.schedule(new TimerTask() {
 
 			@Override
 			public void run() {
-				timeSlider.valueProperty().setValue(timeSlider.valueProperty().getValue() + 1);
+				if (!pause) {
+					timeSlider.valueProperty().setValue(timeSlider.valueProperty().getValue() + 1);
+				}
 			}
 		}, 0, 1000);
+
+		pauseButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> this.pause = true);
+		playButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> this.pause = false);
 
 	}
 
@@ -102,7 +121,7 @@ public class PlayingDetailSubscreenPane extends GridPane {
 	 * @param listener
 	 */
 	public void addSeekListener(ChangeListener<? super Number> listener) {
-		timeSlider.valueProperty().addListener(listener);
+		seekListenerManager.addListener(listener);
 	}
 
 	public void addPlayListener(EventHandler<MouseEvent> handler) {
@@ -128,6 +147,55 @@ public class PlayingDetailSubscreenPane extends GridPane {
 	}
 
 	public void setPosition(int second) {
+		seekListenerManager.dontCallNextChange();
 		timeSlider.valueProperty().setValue(second);
 	}
+
+	public void pause() {
+		this.pause  = true;
+	}
+
+	public void play() {
+		this.pause = false;
+	}
+
+	public boolean isPaused() {
+		return this.pause;
+	}
+
+   private class SeekListenerManager implements ChangeListener<Number> {
+
+        private int i = 0;
+        private Handler handler = new Handler();
+        private List<ChangeListener<? super Number>> listeners = new ArrayList<>();
+    	// dont call seek listener when change is done with setPosition
+    	private boolean dontCallNextChange = false;
+
+        @Override
+        public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+            final int currentI = i++;
+            if (!dontCallNextChange && oldValue.intValue() + 1 != newValue.intValue()) {
+	            Runnable prevRunnable = () -> {
+	            	 // don't call if two skeep successively
+	            	if (currentI == i - 1) {
+		            	for (ChangeListener<? super Number> changeListener : listeners) {
+		            		changeListener.changed(observable, oldValue, newValue);
+						}
+	            	}
+	            };
+	            // don't call if two skeep successively
+	            handler.postDelayed(prevRunnable, 200);
+            }
+
+            dontCallNextChange = false;
+        }
+
+        public void addListener(ChangeListener<? super Number> listener) {
+        	listeners.add(listener);
+        }
+
+        public void dontCallNextChange() {
+        	dontCallNextChange = true;
+        }
+    }
 }
