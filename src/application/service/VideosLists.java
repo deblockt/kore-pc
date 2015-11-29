@@ -76,7 +76,7 @@ public class VideosLists {
 	 * load film list
 	 */
 	public void getFilmList(Callback<List<DetailsMovie>> callback) {
-		// si la liste est déjà chargée ou si c'est en train d'être chargé
+		// si la liste est dÃ©jÃ  chargÃ©e ou si c'est en train d'Ãªtre chargÃ©
 		if (!films.isEmpty() || loadingFilm) {
 			if (!loadingFilm) {
 				callback.call(films);
@@ -110,7 +110,7 @@ public class VideosLists {
 
 			@Override
 			public void onError(int errorCode, String description) {
-				System.out.println("Erreur sur la récupération des films");
+				System.out.println("Erreur sur la rÃ©cupÃ©ration des films");
 				System.out.println(errorCode + ":" + description);
 			}
 		}, new Handler());
@@ -155,7 +155,7 @@ public class VideosLists {
 
 					@Override
 					public void onError(int errorCode, String description) {
-						System.out.println("impossible de récupérer la liste des videos " + detailsTVShow.label);
+						System.out.println("impossible de rÃ©cupÃ©rer la liste des videos " + detailsTVShow.label);
 						System.out.println(errorCode + ", " + description);
 						episodesCallbacks.stream().forEach(callable -> callable.call(episodes));
 					}
@@ -197,7 +197,7 @@ public class VideosLists {
 
 			@Override
 			public void onError(int errorCode, String description) {
-				System.out.println("Erreur lors de la récupération des séries:  " + errorCode + " : " + description);
+				System.out.println("Erreur lors de la rÃ©cupÃ©ration des sÃ©ries:  " + errorCode + " : " + description);
 			}
 		}, new Handler());
 

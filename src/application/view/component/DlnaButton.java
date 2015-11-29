@@ -60,7 +60,7 @@ public class DlnaButton extends HBox {
 		}
 		@Override
 		public void onSuccess(PrepareDownloadReturnType result) {
-			System.out.println("Succes de la réupération de l'URL");
+			System.out.println("Succes de la rÃ©upÃ©ration de l'URL");
 			HostInfo currentHost = HostManager.getInstance().getCurrentHostInfo();
 			String uri = currentHost.getHttpURL() + "/" + result.path;
 			closure.run(uri);
@@ -68,7 +68,7 @@ public class DlnaButton extends HBox {
 
 		@Override
 		public void onError(int errorCode, String description) {
-			System.out.println("Erreur lors de la récupération " + errorCode + " : " + description);
+			System.out.println("Erreur lors de la rÃ©cupÃ©ration " + errorCode + " : " + description);
 		}
 
 	}
@@ -226,7 +226,7 @@ public class DlnaButton extends HBox {
 
 
 		play.setOnAction((e) -> {
-			// récupération de l'url de la video
+			// rÃ©cupÃ©ration de l'url de la video
 			PrepareDownload prepare = new PrepareDownload(detailsItem.file);
 			prepare.execute(
 				HostManager.getInstance().getConnection(),
@@ -242,7 +242,7 @@ public class DlnaButton extends HBox {
 			action.execute(HostManager.getInstance().getConnection(), new ApiCallback<String>() {
 				@Override
 				public void onSuccess(String result) {
-					System.out.println("Lancé avec succès");
+					System.out.println("LancÃ© avec succÃ©s");
 				}
 
 				@Override

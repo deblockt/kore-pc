@@ -135,7 +135,7 @@ public class PlayingController  {
         Tab tab = new Tab(hostInfo.getName());
         tab.setContent(new LoadingContent());
         tabPane.getTabs().add(tab);
-
+        System.out.println("add kody tab");
         HostConnectionObserver observer = new HostConnectionObserver(HostManager.getInstance().getConnection());
         observer.registerPlayerObserver(new PlayerEventsObserver() {
             private PlayingDetailSubscreenPane detail;
@@ -158,9 +158,11 @@ public class PlayingController  {
                 if (detail == null) {
                     String uri = getItemResult.file;
                     String httpUri = HostManager.getInstance().getCurrentHostInfo().getHttpURL();
+                    System.out.println("GET DETAIL FILE " + uri );
                     getDetailsFile(httpUri+uri, (details) -> {
                         detail = new KodyPlayingSubscreenPane(details, getActivePlayerResult, getPropertiesResult);
                         tab.setContent(detail);
+                        System.out.println("MODIFICATION DU CONTENU DE L'ONGLET");
                     });
                 }
 
@@ -222,6 +224,7 @@ public class PlayingController  {
 
         String httpUri = HostManager.getInstance().getCurrentHostInfo().getHttpURL();
 
+        System.out.println("GET DETAIL FILE " + uri );
         if (uri.startsWith(httpUri)) {
         	Tab tab = new Tab(device.getDetails().getFriendlyName());
         	tab.setContent(new LoadingContent());
@@ -232,6 +235,7 @@ public class PlayingController  {
             getDetailsFile(uri, (details) -> {
                 PlayingDetailSubscreenPane detail = new DlnaPlayingSubscreenPane(details, service);
                 tab.setContent(detail);
+                System.out.println("MODIFICATION DU CONTENU DE L'ONGLET");
             });
         }
 
@@ -242,7 +246,6 @@ public class PlayingController  {
     	String httpUri = HostManager.getInstance().getCurrentHostInfo().getHttpURL();
 
         if (uri.startsWith(httpUri)) {
-
             String[] splited = uri.split("/");
             String filename = splited[splited.length - 1];
             for (DetailsFile detailsTVShow : new ArrayList<>(videos)) {

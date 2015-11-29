@@ -134,7 +134,7 @@ public class VideoListController {
 	}
 
 	/**
-	 * retourne la liste avec tous les elements trouvé triés par pertinance
+	 * retourne la liste avec tous les elements trouvÃ© triÃ©s par pertinance
 	 * @param data
 	 * @return
 	 */
