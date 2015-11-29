@@ -18,6 +18,7 @@ import org.xbmc.kore.jsonrpc.type.VideoType.FieldsEpisode;
 
 import application.cache.CacheFactory;
 import application.cache.CachedApiMethod;
+import application.view.component.DlnaButton;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;

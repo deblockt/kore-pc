@@ -10,6 +10,7 @@ import org.xbmc.kore.jsonrpc.HostConnection;
 
 import application.service.ParameterNames;
 import application.service.ParameterService;
+import application.view.component.HostInfoPane;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;

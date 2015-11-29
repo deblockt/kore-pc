@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.TilePane?>
 
-<BorderPane styleClass="background" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.PlayingController">
+<BorderPane styleClass="background" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.playingController.PlayingController">
    <top>
       <ToolBar prefHeight="40.0" prefWidth="200.0" styleClass="background-menu" BorderPane.alignment="CENTER">
          <items>

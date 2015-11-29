@@ -13,6 +13,7 @@ import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.types.ServiceId;
 import org.fourthline.cling.registry.DefaultRegistryListener;
 import org.fourthline.cling.registry.Registry;
+import org.xbmc.kore.jsonrpc.Handler;
 
 public class DLNAService {
 	/**
@@ -64,7 +65,9 @@ public class DLNAService {
         // check for all existing devices
         for (final RemoteDevice device : UPNP_SERVICE.getRegistry().getRemoteDevices()) {
             if (mustCallListener(listener, device)) {
-                listener.deviceAdded(device);
+            	new Handler().post(() -> {
+                    listener.deviceAdded(device);
+            	});
             }
         }
     }

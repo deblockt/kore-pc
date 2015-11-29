@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
@@ -40,7 +41,34 @@
       	               <font>
       	                  <Font size="22.0" />
       	               </font>
+                     <GridPane.margin>
+                        <Insets top="10.0" />
+                     </GridPane.margin>
                      </Label>
+                  <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="plot" GridPane.rowIndex="1">
+                     <content>
+                        <TextFlow prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <Text fx:id="plot" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="plot" text="Text">
+                                 <fill>
+                                    <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                                       <stops>
+                                          <Stop color="WHITE" />
+                                          <Stop color="WHITE" offset="1.0" />
+                                       </stops>
+                                    </RadialGradient>
+                                 </fill>
+                              </Text>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </TextFlow>
+                     </content>
+                     <GridPane.margin>
+                        <Insets top="10.0" />
+                     </GridPane.margin>
+                  </ScrollPane>
                </children>
             </GridPane>
             <GridPane>
@@ -52,7 +80,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-      				<ImageView fx:id="poster" fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" styleClass="poster" />
+      				<ImageView fx:id="poster" fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" styleClass="poster" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                   <HBox alignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <children>
                         <Button fx:id="playButton" mnemonicParsing="false" text="Play">
@@ -70,7 +98,7 @@
                   </HBox>
                </children>
             </GridPane>
-            <GridPane GridPane.columnSpan="2" GridPane.rowIndex="1">
+            <GridPane styleClass="playing-slider-container" GridPane.columnSpan="2" GridPane.rowIndex="1">
                <columnConstraints>
                   <ColumnConstraints hgrow="ALWAYS" />
                   <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="60.0" prefWidth="60.0" />

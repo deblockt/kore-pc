@@ -61,6 +61,7 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
+		System.out.println(System.getProperty("java.io.tmpdir"));
 		// start the DLNA service
 		DLNAService.start();
 

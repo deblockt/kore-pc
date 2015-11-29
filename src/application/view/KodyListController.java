@@ -12,6 +12,7 @@ import org.xbmc.kore.jsonrpc.Handler;
 import org.xbmc.kore.jsonrpc.HostConnection;
 import org.xbmc.kore.jsonrpc.method.JSONRPC.Ping;
 
+import application.view.component.HostInfoPane;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;

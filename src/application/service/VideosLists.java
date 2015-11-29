@@ -25,8 +25,6 @@ import application.cache.Cache;
 import application.cache.CacheFactory;
 import application.cache.CachedApiMethod;
 import application.cache.OneFileCache;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 
 public class VideosLists {
 
@@ -118,6 +116,11 @@ public class VideosLists {
 		}, new Handler());
 	}
 
+	/**
+	 * return all episodes for all tvshow
+	 * callback is call for all tvshow
+	 * @param callback
+	 */
 	public void getAllTvShowEpisods(Callback<List<DetailsEpisode>> callback) {
 		if (!this.episodes.isEmpty() || loadingEpisodes) {
 			if (!loadingEpisodes) {
@@ -135,7 +138,6 @@ public class VideosLists {
 			HostInfo currentHost = HostManager.getInstance().getCurrentHostInfo();
 			HostConnection connection = new HostConnection(currentHost);
 
-			IntegerProperty todo = new SimpleIntegerProperty(tvShows.size());
 			for (DetailsTVShow detailsTVShow : tvshows) {
 				CachedApiMethod<List<DetailsEpisode>> getTvShows = new CachedApiMethod<>(
 					new GetEpisodes(detailsTVShow.tvshowid, FieldsEpisode.allValues),
@@ -148,21 +150,14 @@ public class VideosLists {
 					public void onSuccess(List<DetailsEpisode> result) {
 						episodes.addAll(result);
 						loadingEpisodes = false;
-						todo.set(todo.get() - 1);
-						System.out.println("nombre de series à scanner : " + todo.get());
-						if (todo.get() == 0) {
-							episodesCallbacks.stream().forEach(callable -> callable.call(episodes));
-						}
+						episodesCallbacks.stream().forEach(callable -> callable.call(result));
 					}
 
 					@Override
 					public void onError(int errorCode, String description) {
 						System.out.println("impossible de récupérer la liste des videos " + detailsTVShow.label);
 						System.out.println(errorCode + ", " + description);
-						todo.set(todo.get() - 1);
-						if (todo.get() == 0) {
-							episodesCallbacks.stream().forEach(callable -> callable.call(episodes));
-						}
+						episodesCallbacks.stream().forEach(callable -> callable.call(episodes));
 					}
 				}, new Handler());
 			}

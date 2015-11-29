@@ -6,6 +6,7 @@ import org.xbmc.kore.host.HostManager;
 import org.xbmc.kore.jsonrpc.type.VideoType.DetailsMovie;
 
 import application.component.CacheImageFactory;
+import application.view.component.DlnaButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
