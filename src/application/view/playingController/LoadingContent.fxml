@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.TilePane?>
+
+
+<fx:root styleClass="detail-content" type="javafx.scene.layout.GridPane" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fx:id="loadingImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+      <Label text="Patientez chargement en cours" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+   </children>
+   <rowConstraints>
+      <RowConstraints fillHeight="true" percentHeight="100.0" vgrow="ALWAYS"/>
+      <RowConstraints fillHeight="true" percentHeight="100.0" vgrow="ALWAYS" />
+   </rowConstraints>
+   <columnConstraints>
+		<ColumnConstraints fillWidth="true" hgrow="ALWAYS" percentWidth="100.0" />
+	</columnConstraints>
+</fx:root>
