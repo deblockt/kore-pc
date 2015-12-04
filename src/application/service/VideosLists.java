@@ -130,7 +130,7 @@ public class VideosLists {
 			}
 			return;
 		}
-		loadingFilm = true;
+		loadingEpisodes = true;
 		episodesCallbacks.add(callback);
 
 		System.out.println("Chargement des episodes");

@@ -52,8 +52,14 @@ public class PlayingController  {
     private Boolean allLoaded = false;
     private Map<Callback<DetailsFile>, String> callbackSearchFile = new HashMap<>();
 
+    public PlayingController() {
+    	System.out.println("PlayingController_constructor");
+    }
+
     @FXML
     private void initialize() {
+
+    	System.out.println("PlayingController_initialize");
         VideosLists.INSTANCE.getFilmList((list) -> {
             System.out.println("films loaded");
             videos.addAll(list);

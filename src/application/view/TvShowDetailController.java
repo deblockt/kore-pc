@@ -70,6 +70,9 @@ public class TvShowDetailController {
 	private Pane episodDetails;
 
 	@FXML
+	private Pane backgroundTvShowDetail;
+
+	@FXML
 	private Label episodTitle;
 
 	@FXML
@@ -107,7 +110,7 @@ public class TvShowDetailController {
 		        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
 		          new BackgroundSize(100, 100, true, true, false, true));
 
-			seasonDetail.setBackground(new Background(myBI));
+			backgroundTvShowDetail.setBackground(new Background(myBI));
 		}
 		this.loadTvShowDetail();
 
@@ -164,8 +167,7 @@ public class TvShowDetailController {
 
                         		Label seen = new Label("Vu");
                         		seen.getStyleClass().add("seen");
-                        		// not work i don't understand
-                        		seen.setTextFill(Paint.valueOf("rgb(171, 247, 115)"));
+
                         		HBox.setMargin(seen, new Insets(0, 10, 0, 0));
 
                         		box.getChildren().add(seen);

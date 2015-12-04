@@ -84,11 +84,9 @@ public class VideoListController {
 
 	public synchronized void loadTvShow() {
 		if (!tvShowsLoaded) {
-			System.out.println("Chargement des series");
 			VideosLists.INSTANCE.getTvShow((list) -> {
 				tvShows = list;
 				tvShowsLoaded = true;
-				System.out.println("Fin du chargement");
 				new Handler().post(() -> showAllTvShow());
 			});
 		}
