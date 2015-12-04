@@ -201,7 +201,6 @@ public class NetUtils {
     private static final int MAX_DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
 
     public static File createDefaultCacheDir() {
-    	// TODO paramètrer un cache
         File cache = new File(System.getProperty("java.io.tmpdir"), APP_CACHE);
         if (!cache.exists()) {
             //noinspection ResultOfMethodCallIgnored

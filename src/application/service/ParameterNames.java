@@ -25,9 +25,9 @@ public class ParameterNames {
 	public static final String SELECTED_HOST = "selectedHost";
 
 	/**
-	 * retourne le nom du paramètre indexé
+	 * retourne le nom du paramÃ©tre indexÃ©
 	 *
-	 * @param nameTemplate le nom du paramètre
+	 * @param nameTemplate le nom du paramÃ¨tre
 	 * @param index la valeur de l'index
 	 * @return
 	 */

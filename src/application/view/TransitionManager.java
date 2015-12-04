@@ -167,7 +167,7 @@ public class TransitionManager {
 
 	        dialog.initModality(Modality.APPLICATION_MODAL);
 	        dialog.initOwner(primaryStage);
-	        dialog.setTitle("Paramètres");
+	        dialog.setTitle("ParamÃ¨tres");
 
 	        Scene dialogScene = new Scene(popup, 600, 400);
 	        dialogScene.getStylesheets().add(Main.class.getResource("application.css").toExternalForm());

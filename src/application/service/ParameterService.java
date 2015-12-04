@@ -24,7 +24,7 @@ public class ParameterService {
     	try {
 			properties.load(new FileInputStream(new File(PROPERTIES_FILE)));
 		} catch (IOException e) {
-			System.err.println("Impossible de charger les paramètres");
+			System.err.println("Impossible de charger les paramÃ©tres");
 			//e.printStackTrace();
 		}
     }

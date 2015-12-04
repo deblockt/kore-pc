@@ -4,7 +4,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class Handler {
-	// TODO paramètrer le nombre de thread
+	// TODO paramÃ©trer le nombre de thread
 	private final static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(5);
 
 	public void post(Runnable r) {

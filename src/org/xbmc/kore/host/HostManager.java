@@ -167,7 +167,7 @@ public class HostManager {
 
 		paramService.save();
 
-		if (this.currentHostInfo == null) {
+		if (this.currentHostInfo.get() == null) {
 			this.setCurrentHostInfo(newHostInfo);
 		}
 	}

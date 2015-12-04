@@ -64,15 +64,15 @@ public class KodyListController {
 						if (valide.isEmpty()) {
 							Alert alert = new Alert(AlertType.ERROR);
 							alert.setTitle("Erreur");
-							alert.setHeaderText("Desolé, nous n'arrivons pas à contacter votre serveur Kody (xbmc)");
-							alert.setContentText("Merci de vérifier que le serveur soit correctement allumé, et les informations indiquées.");
+							alert.setHeaderText("DesolÃ©, nous n'arrivons pas Ã  contacter votre serveur Kody (xbmc)");
+							alert.setContentText("Merci de vÃ©rifier que le serveur soit correctement allumÃ©, et les informations indiquÃ©es.");
 
 							alert.showAndWait();
 						} else if (!invalide.isEmpty()){
 							Alert alert = new Alert(AlertType.CONFIRMATION);
 							alert.setTitle("Attention");
 							alert.setHeaderText("Certain serveurs Kody (xbmc) sont inaccessible.");
-							alert.setContentText("Voulez vous tout de même continuer ?");
+							alert.setContentText("Voulez vous tout de mÃªme continuer ?");
 
 							Optional<ButtonType> result = alert.showAndWait();
 							if (result.get() == ButtonType.OK){
@@ -129,7 +129,9 @@ public class KodyListController {
 			String name = string;
 			try {
 				name = InetAddress.getByName(string).getHostName();
-			} catch (Exception e) {}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
 			HostInfo hostInfo = new HostInfo(
 					name,
