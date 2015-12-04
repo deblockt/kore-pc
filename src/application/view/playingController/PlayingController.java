@@ -75,11 +75,13 @@ public class PlayingController  {
         VideosLists.INSTANCE.getAllTvShowEpisods((list) -> {
             videos.addAll(list);
             videoAdded(list);
-            synchronized (tvOrVideoloaded) {
-                if (tvOrVideoloaded) {
-                    allLoaded = true;
-                }
-                tvOrVideoloaded = true;
+            if (!VideosLists.INSTANCE.isLoadingEpisodes()) {
+	            synchronized (tvOrVideoloaded) {
+	                if (tvOrVideoloaded) {
+	                    allLoaded = true;
+	                }
+	                tvOrVideoloaded = true;
+	            }
             }
         });
 
@@ -250,9 +252,9 @@ public class PlayingController  {
 
     public void getDetailsFile(String uri, Callback<DetailsFile> callback) {
     	String httpUri = HostManager.getInstance().getCurrentHostInfo().getHttpURL();
-
         if (uri.startsWith(httpUri)) {
-            String[] splited = uri.split("/");
+            boolean isAllLoaded = allLoaded;
+        	String[] splited = uri.split("/");
             String filename = splited[splited.length - 1];
             for (DetailsFile detailsTVShow : new ArrayList<>(videos)) {
                 if (isSameFile(filename, detailsTVShow.file)) {
@@ -261,7 +263,7 @@ public class PlayingController  {
                 }
             }
 
-            if (!allLoaded) {
+            if (!isAllLoaded) {
             	callbackSearchFile.put(callback, filename);
             }
         }

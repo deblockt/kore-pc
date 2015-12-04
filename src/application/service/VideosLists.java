@@ -25,6 +25,8 @@ import application.cache.Cache;
 import application.cache.CacheFactory;
 import application.cache.CachedApiMethod;
 import application.cache.OneFileCache;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 public class VideosLists {
 
@@ -138,6 +140,7 @@ public class VideosLists {
 			HostInfo currentHost = HostManager.getInstance().getCurrentHostInfo();
 			HostConnection connection = new HostConnection(currentHost);
 
+			IntegerProperty todo = new SimpleIntegerProperty(tvshows.size());
 			for (DetailsTVShow detailsTVShow : tvshows) {
 				CachedApiMethod<List<DetailsEpisode>> getTvShows = new CachedApiMethod<>(
 					new GetEpisodes(detailsTVShow.tvshowid, FieldsEpisode.allValues),
@@ -148,8 +151,9 @@ public class VideosLists {
 
 					@Override
 					public void onSuccess(List<DetailsEpisode> result) {
+						todo.set(todo.get() - 1);
 						episodes.addAll(result);
-						loadingEpisodes = false;
+						loadingEpisodes = todo.get() != 0;
 						episodesCallbacks.stream().forEach(callable -> callable.call(result));
 					}
 
@@ -203,5 +207,20 @@ public class VideosLists {
 
 	}
 
+	/**
+	 *
+	 * @return true if episodes are loading
+	 */
+	public boolean isLoadingEpisodes() {
+		return loadingEpisodes;
+	}
+
+	/**
+	 *
+	 * @return true if tvshow are loading
+	 */
+	public boolean isLoadingTvShows() {
+		return loadingTvShows;
+	}
 
 }
