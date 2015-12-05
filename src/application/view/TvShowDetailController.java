@@ -36,6 +36,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
@@ -123,7 +124,6 @@ public class TvShowDetailController {
 		seasonList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			episodList.setItems(FXCollections.observableArrayList(episodes.get(newValue)));
 		});
-
 
 		episodList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			dlnaButton.setDetailsEpisode(newValue);
@@ -215,6 +215,11 @@ public class TvShowDetailController {
 		});
 
 		episodDetails.setVisible(false);
+
+		// update poster size with screen size
+		Region parentRegion = (Region) poster.getParent();
+		poster.fitWidthProperty().bind(parentRegion.widthProperty());
+		poster.fitHeightProperty().bind(parentRegion.heightProperty());
 	}
 
 	private void loadTvShowDetail() {

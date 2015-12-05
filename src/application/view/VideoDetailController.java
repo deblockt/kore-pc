@@ -18,7 +18,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 
 public class VideoDetailController {
@@ -47,9 +47,6 @@ public class VideoDetailController {
 	private Pane fanartBackground;
 
 	@FXML
-	private VBox posterContainer;
-
-	@FXML
 	private Label year;
 
 	@FXML
@@ -72,8 +69,9 @@ public class VideoDetailController {
 		videoButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> TransitionManager.showVideoList(VideoType.VIDEO));
 		tvshowButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> TransitionManager.showVideoList(VideoType.TV_SHOW));
 
-
-
+		Region parentRegion = (Region) poster.getParent();
+		poster.fitWidthProperty().bind(parentRegion.widthProperty());
+		poster.fitHeightProperty().bind(parentRegion.heightProperty());
 	}
 
 	private void reinitData() {
@@ -83,6 +81,7 @@ public class VideoDetailController {
 		HostInfo host = HostManager.getInstance().getCurrentHostInfo();
 		Image image = CacheImageFactory.getImage(host.getImageUrl(detailsMovie.thumbnail), 300, -1, true, true, true);
 		poster.setImage(image);
+
 
 		if (detailsMovie.fanart != null) {
 			BackgroundImage myBI= new BackgroundImage(CacheImageFactory.getImage(host.getImageUrl(detailsMovie.fanart), true),

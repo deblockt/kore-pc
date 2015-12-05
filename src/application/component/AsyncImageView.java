@@ -5,7 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
+import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.BoundingBox;
@@ -22,8 +27,12 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 public class AsyncImageView extends Pane {
+
+	final BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(100);
+	final ThreadPoolExecutor executorService = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, queue);
 
 	/**
 	 * Handler for remove placeholder when image is loaded
@@ -41,8 +50,27 @@ public class AsyncImageView extends Pane {
 		@Override
 		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 			if (newValue.floatValue() == 1.0 && !asyncImageView.imageView.getImage().isError()) {
-				asyncImageView.getChildren().remove(asyncImageView.placeholder);
-				asyncImageView.getChildren().add(asyncImageView.imageView);
+				FadeTransition fadeIn = new FadeTransition(
+				    Duration.millis(300)
+				);
+				fadeIn.setNode(asyncImageView.placeholder);
+			    fadeIn.setFromValue(1.0);
+			    fadeIn.setToValue(0.0);
+			    fadeIn.setCycleCount(1);
+			    fadeIn.setAutoReverse(false);
+
+			    FadeTransition fadeout = new FadeTransition(
+					    Duration.millis(300)
+					);
+			    fadeout.setFromValue(0.0);
+			    fadeout.setToValue(1.0);
+			    fadeout.setCycleCount(1);
+			    fadeout.setAutoReverse(false);
+
+				fadeIn.playFromStart();
+				asyncImageView.imageView.setVisible(true);
+				fadeout.setNode(asyncImageView.imageView);
+				fadeout.playFromStart();
 			}
 		}
 	};
@@ -92,6 +120,9 @@ public class AsyncImageView extends Pane {
 
 		this.getChildren().add(placeholder);
 
+
+
+
 		if (!scrollToAsync.containsKey(scrollPane.getId())) {
 			ChangeListener<Number> changeListener = new ChangeListener<Number>() {
 
@@ -124,12 +155,17 @@ public class AsyncImageView extends Pane {
 				observable.removeListener(this);
 			}
 		});
+
+
 	}
 
 	private void loadImage(){
 		Image image = CacheImageFactory.getImage(this.path, TILE_WIDTH, TILE_HEIGHT, true, true, true);
-		this.imageView = new ImageView(image);
+		this.imageView = new ImageView();
 		this.imageView.getStyleClass().add("poster");
+		this.imageView.setImage(image);
+		this.imageView.setVisible(false);
+		this.getChildren().add(this.imageView);
 		image.progressProperty().addListener(new RemovePlaceHolderListener(this));
 	}
 

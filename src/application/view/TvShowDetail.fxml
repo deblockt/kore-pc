@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.TilePane?>
 
-<BorderPane minHeight="600.0" minWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.TvShowDetailController">
+<BorderPane minHeight="300.0" minWidth="400.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.TvShowDetailController">
    <center>
       <GridPane fx:id="backgroundTvShowDetail" BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -29,18 +29,31 @@
                <children>
                   <GridPane styleClass="hover-fanart-background">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="15.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="20.0" />
                       <ColumnConstraints hgrow="SOMETIMES" percentWidth="85.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <ImageView fx:id="poster" fitHeight="205.0" fitWidth="191.0" pickOnBounds="true" preserveRatio="true" styleClass="poster" GridPane.halignment="CENTER">
-                           <viewport>
-                              <Rectangle2D />
-                           </viewport>
-                        </ImageView>
+                        <GridPane GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                           <GridPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </GridPane.margin>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="0.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <ImageView fx:id="poster" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" styleClass="poster">
+                                 <viewport>
+                                    <Rectangle2D />
+                                 </viewport>
+                              </ImageView>
+                           </children>
+                        </GridPane>
                         <GridPane GridPane.columnIndex="1">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" percentWidth="100.0" />

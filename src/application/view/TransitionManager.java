@@ -63,10 +63,9 @@ public class TransitionManager {
         try {
         	Parent root =  loader.load();
 
+            primaryStage.getScene().setRoot(root);
             VideoDetailController videoDetailController = loader.getController();
             videoDetailController.setVideoData(detailsMovie);
-
-            primaryStage.getScene().setRoot(root);
         } catch (Exception e) {
         	throw new RuntimeException(e);
         }
