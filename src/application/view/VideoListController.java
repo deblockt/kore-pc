@@ -18,6 +18,7 @@ import application.cache.Cache;
 import application.cache.CacheFactory;
 import application.cache.OneFileCache;
 import application.component.AsyncImageView;
+import application.service.KodiError;
 import application.service.PoundedElement;
 import application.service.SmithWaterman;
 import application.service.VideosLists;
@@ -25,11 +26,18 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+/**
+ * Controller for show video or tvshow controller
+ *
+ * @author thomas
+ *
+ */
 public class VideoListController {
 
 	@FXML
@@ -78,7 +86,7 @@ public class VideoListController {
 				films = list;
 				filmsLoaded = true;
 				new Handler().post(() -> showAllFilms());
-			});
+			},  this::showError);
 		}
 	}
 
@@ -88,7 +96,7 @@ public class VideoListController {
 				tvShows = list;
 				tvShowsLoaded = true;
 				new Handler().post(() -> showAllTvShow());
-			});
+			}, this::showError);
 		}
 	}
 
@@ -275,7 +283,16 @@ public class VideoListController {
 
 	}
 
+	private void showError(KodiError error) {
+		TextArea textArea = new TextArea();
+		textArea.appendText("Une erreur est survenue lors de l'accès à Kodi. Merci de vérifier votre connexion.\n");
+		textArea.appendText("Code d'erreur : " + error.getErrorCode() + "\n");
+		textArea.appendText("Message : " + error.getDescription() + "\n");
 
+		textArea.getStyleClass().add("plot");
+		textArea.setStyle("-fx-background-color : transparent");
+		contentPane.getChildren().add(textArea);
+	}
 
 
 	private void reload() {

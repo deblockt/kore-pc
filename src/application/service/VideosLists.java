@@ -36,6 +36,7 @@ public class VideosLists {
 	private List<DetailsMovie> films = new ArrayList<>();
 	private boolean loadingFilm = false;
 	private List<Callback<List<DetailsMovie>>> filmCallbacks = new ArrayList<>();
+	private List<Callback<KodiError>> filmErrorCallback = new ArrayList<>();
 
 	/**
 	 * list of tvshow
@@ -43,6 +44,7 @@ public class VideosLists {
 	protected List<DetailsTVShow> tvShows = new ArrayList<>();
 	private boolean loadingTvShows = false;
 	private List<Callback<List<DetailsTVShow>>> tvShowCallbacks = new ArrayList<>();
+	private List<Callback<KodiError>> tvShowErrorCallback = new ArrayList<>();
 
 	/**
 	 * list of tvshow episods
@@ -50,7 +52,7 @@ public class VideosLists {
 	protected List<DetailsEpisode> episodes = new ArrayList<>();
 	private boolean loadingEpisodes = false;
 	private List<Callback<List<DetailsEpisode>>> episodesCallbacks = new ArrayList<>();
-
+	private List<Callback<KodiError>> episodesShowErrorCallback = new ArrayList<>();
 
 
 	public final static VideosLists INSTANCE = new VideosLists();
@@ -77,18 +79,24 @@ public class VideosLists {
 	/**
 	 * load film list
 	 */
-	public void getFilmList(Callback<List<DetailsMovie>> callback) {
+	public void getFilmList(Callback<List<DetailsMovie>> callback, Callback<KodiError> errorCallback) {
 		// si la liste est déjà chargée ou si c'est en train d'être chargé
 		if (!films.isEmpty() || loadingFilm) {
 			if (!loadingFilm) {
 				callback.call(films);
 			} else {
 				filmCallbacks.add(callback);
+				if (errorCallback != null) {
+					filmErrorCallback.add(errorCallback);
+				}
 			}
 			return;
 		}
 		loadingFilm = true;
 		filmCallbacks.add(callback);
+		if (errorCallback != null) {
+			filmErrorCallback.add(errorCallback);
+		}
 
 		HostInfo currentHost = HostManager.getInstance().getCurrentHostInfo();
 		HostConnection connection = new HostConnection(currentHost);
@@ -112,6 +120,7 @@ public class VideosLists {
 
 			@Override
 			public void onError(int errorCode, String description) {
+				filmErrorCallback.stream().forEach(callable -> callable.call(new KodiError(errorCode, description)));
 				System.out.println("Erreur sur la récupération des films");
 				System.out.println(errorCode + ":" + description);
 			}
@@ -123,18 +132,23 @@ public class VideosLists {
 	 * callback is call for all tvshow
 	 * @param callback
 	 */
-	public void getAllTvShowEpisods(Callback<List<DetailsEpisode>> callback) {
+	public void getAllTvShowEpisods(Callback<List<DetailsEpisode>> callback, Callback<KodiError> errorCallback) {
 		if (!this.episodes.isEmpty() || loadingEpisodes) {
 			if (!loadingEpisodes) {
 				callback.call(episodes);
 			} else {
 				episodesCallbacks.add(callback);
+				if (errorCallback != null) {
+					episodesShowErrorCallback.add(errorCallback);
+				}
 			}
 			return;
 		}
 		loadingEpisodes = true;
 		episodesCallbacks.add(callback);
-
+		if (errorCallback != null) {
+			episodesShowErrorCallback.add(errorCallback);
+		}
 		System.out.println("Chargement des episodes");
 		getTvShow((tvshows) -> {
 			HostInfo currentHost = HostManager.getInstance().getCurrentHostInfo();
@@ -161,26 +175,31 @@ public class VideosLists {
 					public void onError(int errorCode, String description) {
 						System.out.println("impossible de récupérer la liste des videos " + detailsTVShow.label);
 						System.out.println(errorCode + ", " + description);
-						episodesCallbacks.stream().forEach(callable -> callable.call(episodes));
+						episodesShowErrorCallback.stream().forEach(callable -> callable.call(new KodiError(errorCode, description)));
 					}
 				}, new Handler());
 			}
-		});
+		}, errorCallback);
 
 	}
 
-	public void getTvShow(Callback<List<DetailsTVShow>> callback) {
+	public void getTvShow(Callback<List<DetailsTVShow>> callback, Callback<KodiError> errorCallback) {
 		if (!this.tvShows.isEmpty() || loadingTvShows) {
 			if (!loadingTvShows) {
 				callback.call(tvShows);
 			} else {
 				tvShowCallbacks.add(callback);
+				if (errorCallback != null) {
+					tvShowErrorCallback.add(errorCallback);
+				}
 			}
 			return;
 		}
 		loadingTvShows = true;
 		tvShowCallbacks.add(callback);
-
+		if (errorCallback != null) {
+			tvShowErrorCallback.add(errorCallback);
+		}
 		CachedApiMethod<List<DetailsTVShow>> getTvShows = new CachedApiMethod<>(
 			new GetTVShows(FieldsTVShow.allValues),
 			TVSHOW_CACHE
@@ -202,6 +221,7 @@ public class VideosLists {
 			@Override
 			public void onError(int errorCode, String description) {
 				System.out.println("Erreur lors de la récupération des séries:  " + errorCode + " : " + description);
+				tvShowErrorCallback.stream().forEach(callable -> callable.call(new KodiError(errorCode, description)));
 			}
 		}, new Handler());
 

@@ -25,6 +25,11 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * Controller for select kodi server
+ * @author thomas
+ *
+ */
 public class KodyListController {
 
 	private List<HostInfoPane> hostInfoPanes = new ArrayList<>();

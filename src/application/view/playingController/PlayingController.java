@@ -70,7 +70,7 @@ public class PlayingController  {
                 }
                 tvOrVideoloaded = true;
             }
-        });
+        }, null);
 
         VideosLists.INSTANCE.getAllTvShowEpisods((list) -> {
             videos.addAll(list);
@@ -83,7 +83,7 @@ public class PlayingController  {
 	                tvOrVideoloaded = true;
 	            }
             }
-        });
+        }, null);
 
         backButton.addEventFilter(MouseEvent.MOUSE_CLICKED, (e) -> {
             TransitionManager.showVideoList(VideoType.VIDEO);
